@@ -11,6 +11,8 @@ createalzkv                = true
 createauditsta             = true
 creatediagsta              = true
 createalzvnet              = true
+disk_type                  = "Standard_LRS"
+disk_size                  = 4
 
 #########################################Parameters for virtual machine######################################################
 vm_size              = "Standard_B2s"
