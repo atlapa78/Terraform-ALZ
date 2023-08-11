@@ -126,3 +126,13 @@ module "dc_controller" {
   keyvault_secret_name = var.keyvault_secret_name
   depends_on           = [module.vnet_alz]
 }
+
+module "managed_disk" {
+  source               = "./managed_disk"
+  name                 = lower("module.dc_controller.vm_name-data-data")
+  location             = var.location
+  resource_group_name  = module.infrastructurerg.rg_name
+  storage_account_type = var.disk_type
+  create_option        = "Empty"
+  disk_size_gb         = var.disk_size
+}
