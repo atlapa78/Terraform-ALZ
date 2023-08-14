@@ -56,7 +56,7 @@ module "operationallogsWS" {
 
 module "keyvault" {
   source = "./keyvault"
-  //count                      = var.createalzkv ? 1 : 0
+  count                      = var.createalzkv ? 1 : 0
   rgname                     = module.keyvaultrg.rg_name
   location                   = var.location
   vault_name                 = lower("${var.CustomerID}-alz-${var.regions[var.location]}-kv")
@@ -112,11 +112,12 @@ module "vnet_alz" {
 
 module "windows_vm" {
   source               = "./vm"
+  count                = var.create_vms ? var.vm_number : 0
   location             = var.location
   rgname               = module.infrastructurerg.rg_name
   subnet_id            = module.vnet_alz.subnetiddc
-  keyvault_id          = module.keyvault.azurerm_key_vault_id
-  vm_name              = lower("${var.CustomerID}dc${var.regions[var.location]}p0")
+  keyvault_id          = module.keyvault[0].azurerm_key_vault_id
+  vm_name              = lower("${var.CustomerID}dc${var.regions[var.location]}p0${count.index}")
   vm_size              = var.vm_size
   admin_username       = var.admin_username
   vm_publisher         = var.vm_publisher
@@ -124,12 +125,13 @@ module "windows_vm" {
   vm_sku               = var.vm_sku
   vm_version           = var.vm_version
   keyvault_secret_name = var.keyvault_secret_name
+  
   depends_on           = [module.vnet_alz]
 }
 
 module "managed_disk" {
   source               = "./managed_disk"
-  disk_name            = lower("${module.windows_vm.vm_name}-data-01")
+  disk_name            = lower("${module.windows_vm[0].vm_name}-data-01")
   location             = var.location
   rgname               = module.infrastructurerg.rg_name
   disk_type            = var.disk_type
@@ -139,7 +141,7 @@ module "managed_disk" {
 module "disk_attachment" {
   source               = "./mngd_disk_attachment"
   disk_id              = module.managed_disk.disk_id
-  vm_id                = module.windows_vm.vm_id
+  vm_id                = module.windows_vm[0].vm_id
   lun_id               = 1
   caching              = var.cache_mode
   depends_on           = [

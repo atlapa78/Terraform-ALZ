@@ -188,6 +188,17 @@ variable "vm_purpose" {
   }
 }
 
+variable "create_vms" {
+  type                 = bool
+  description          = "value used for the vm creation"
+  
+}
+
+variable "vm_number"  {
+  type                 = number
+  description          = "number of domain controllers to be created"
+}
+
 variable "vm_size" {
   type        = string
   description = "virtual machine size"
