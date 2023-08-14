@@ -110,13 +110,13 @@ module "vnet_alz" {
 
 
 
-module "dc_controller" {
+module "windows_vm" {
   source               = "./vm"
   location             = var.location
   rgname               = module.infrastructurerg.rg_name
   subnet_id            = module.vnet_alz.subnetiddc
   keyvault_id          = module.keyvault.azurerm_key_vault_id
-  vm_name              = lower("${var.CustomerID}-dc-${var.regions[var.location]}-p01")
+  vm_name              = lower("${var.CustomerID}dc${var.regions[var.location]}p0")
   vm_size              = var.vm_size
   admin_username       = var.admin_username
   vm_publisher         = var.vm_publisher
@@ -129,10 +129,21 @@ module "dc_controller" {
 
 module "managed_disk" {
   source               = "./managed_disk"
-  name                 = lower("module.dc_controller.vm_name-data-data")
+  disk_name            = lower("${module.windows_vm.vm_name}-data-01")
   location             = var.location
-  resource_group_name  = module.infrastructurerg.rg_name
-  storage_account_type = var.disk_type
-  create_option        = "Empty"
-  disk_size_gb         = var.disk_size
+  rgname               = module.infrastructurerg.rg_name
+  disk_type            = var.disk_type
+  disk_size            = var.disk_size
+}
+
+module "disk_attachment" {
+  source               = "./mngd_disk_attachment"
+  disk_id              = module.managed_disk.disk_id
+  vm_id                = module.windows_vm.vm_id
+  lun_id               = 1
+  caching              = var.cache_mode
+  depends_on           = [
+    module.managed_disk,
+    module.windows_vm
+  ]
 }

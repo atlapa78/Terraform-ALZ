@@ -174,6 +174,20 @@ variable "subnets" {
 
 ################################################Azure virtual machines variables################################################
 
+variable "vm_purpose" {
+  description = "Map of the purpose for virtual machines"
+  type        = map(any)
+  default = {
+    domaincontroller   = "dc"
+    webserver          = "web"
+    appserver          = "app"
+    databaseserver     = "db"
+    fileserver         = "fs"
+    sapserver          = "sap"
+    proxyserver        = "pxs"    
+  }
+}
+
 variable "vm_size" {
   type        = string
   description = "virtual machine size"
@@ -230,3 +244,10 @@ variable "disk_size" {
 }
 
 ################################################Managed Disks variables################################################
+
+################################################Managed Disks Attachemntvariables################################################
+variable "cache_mode" {
+  type        = string
+  description = "Caching mode for the managed disk. Possible values include None, ReadOnly and ReadWrite"
+}
+################################################Managed Disks Attachemntvariables################################################

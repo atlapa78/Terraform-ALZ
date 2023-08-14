@@ -1,4 +1,4 @@
-CustomerID                 = "att"
+CustomerID                 = "sbx"
 location                   = "eastus"
 environment                = "alz"
 laws_sku                   = "PerGB2018"
@@ -13,15 +13,15 @@ creatediagsta              = true
 createalzvnet              = true
 disk_type                  = "Standard_LRS"
 disk_size                  = 4
-
+cache_mode                 = "None"
 #########################################Parameters for virtual machine######################################################
-vm_size              = "Standard_B2s"
-admin_username       = "eitadm"
-vm_publisher         = "MicrosoftWindowsServer"
-vm_offer             = "WindowsServer"
-vm_sku               = "2016-Datacenter"
-vm_version           = "latest"
-keyvault_secret_name = "Terraform-vm-password"
+vm_size                    = "Standard_B2s"
+admin_username             = "eitadm"
+vm_publisher               = "MicrosoftWindowsServer"
+vm_offer                   = "WindowsServer"
+vm_sku                     = "2016-Datacenter"
+vm_version                 = "latest"
+keyvault_secret_name       = "Terraform-vm-password"
 #########################################Parameters for virtual machine######################################################
 
 
