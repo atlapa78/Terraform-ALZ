@@ -17,12 +17,12 @@ resource "azurerm_key_vault" "keyvault" {
 
 
 resource "azurerm_key_vault_access_policy" "accesspolicy" {
-  key_vault_id        = azurerm_key_vault.keyvault.id
-  tenant_id           = var.tenant_id
-  object_id           = "d223ee36-0475-4dbb-b3f0-96d8d8a65363"
+  key_vault_id = azurerm_key_vault.keyvault.id
+  tenant_id    = var.tenant_id
+  object_id    = "d223ee36-0475-4dbb-b3f0-96d8d8a65363"
 
-  key_permissions     = var.key_permissions
+  key_permissions = var.key_permissions
 
-  secret_permissions  = var.secret_permissions
+  secret_permissions = var.secret_permissions
 }
 

@@ -12,7 +12,7 @@ variable "rgname" {
 variable "disk_name" {
   type        = string
   description = "name of the managed disk"
-  
+
 }
 
 variable "disk_type" {
@@ -22,6 +22,6 @@ variable "disk_type" {
 }
 
 variable "disk_size" {
-  type        =  number
+  type        = number
   description = "value"
 }

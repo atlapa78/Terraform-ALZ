@@ -2,7 +2,25 @@ data "azurerm_client_config" "current" {}
 
 locals {
   current_user_id = coalesce(var.msi_id, data.azurerm_client_config.current.object_id)
+
+  vm_w_mndg_disks = tolist([for vm_name in module.windows_vm[*].vm_name : lower(vm_name)])
+  data_disk_type  = tolist([for disk in values(var.data_disks) : lower(tostring(disk.disk_type))])
+  data_disk_size  = tolist([for disk in values(var.data_disks) : disk.disk_size])
+  data_disk_id    = tolist([for disk in values(var.data_disks) : lower(tostring(disk.id))])
+  disks_names_id  = setproduct(local.vm_w_mndg_disks, local.data_disk_id)
+  lun_map_names   = [for pair in local.disks_names_id : [
+    format("${pair[0]}-data-%02d", pair[1])
+    ]
+  ]
+  lun_map = [for pair in local.disks_names_id : {
+    datadisk_name = format("${pair[0]}-data-%02d", pair[1])
+    lun           = tonumber(pair[1])
+    }
+  ]
+  luns = { for k in local.lun_map : k.datadisk_name => k.lun }
+ // attachment = [for disk in toset(values(module.managed_disks)[*]) : disk.disk_name => disk.disk_id]
 }
+
 
 module "auditlogsrg" {
   source   = "./resourcegroup"
@@ -55,7 +73,7 @@ module "operationallogsWS" {
 }
 
 module "keyvault" {
-  source = "./keyvault"
+  source                     = "./keyvault"
   count                      = var.createalzkv ? 1 : 0
   rgname                     = module.keyvaultrg.rg_name
   location                   = var.location
@@ -125,27 +143,86 @@ module "windows_vm" {
   vm_sku               = var.vm_sku
   vm_version           = var.vm_version
   keyvault_secret_name = var.keyvault_secret_name
-  
-  depends_on           = [module.vnet_alz]
+
+  depends_on = [module.vnet_alz]
 }
 
 module "managed_disk" {
-  source               = "./managed_disk"
-  disk_name            = lower("${module.windows_vm[0].vm_name}-data-01")
-  location             = var.location
-  rgname               = module.infrastructurerg.rg_name
-  disk_type            = var.disk_type
-  disk_size            = var.disk_size
+  source    = "./managed_disk"
+  for_each  = local.luns
+  disk_name = each.key  
+  location  = var.location
+  rgname    = module.infrastructurerg.rg_name
+  disk_type = values(var.data_disks)[each.value].disk_type
+  disk_size = values(var.data_disks)[each.value].disk_size
+  depends_on = [
+    module.windows_vm,
+    module.infrastructurerg
+   ]
 }
+
 
 module "disk_attachment" {
   source               = "./mngd_disk_attachment"
-  disk_id              = module.managed_disk.disk_id
-  vm_id                = module.windows_vm[0].vm_id
-  lun_id               = 1
+  for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
+  disk_id              = each.value
+  vm_id                = lookup({for vm in module.windows_vm : vm.vm_name => vm.vm_id}, substr(each.key,0,11))
+  lun_id               = tonumber(lookup(local.luns,each.key))
   caching              = var.cache_mode
   depends_on           = [
     module.managed_disk,
     module.windows_vm
   ]
 }
+
+output "vm_names" {
+  value = local.vm_w_mndg_disks
+
+}
+
+output "data_dsk" {
+  value = local.data_disk_id
+}
+
+output "disks_names" {
+
+  value = local.disks_names_id
+}
+
+
+output "lun_map" {
+  value = local.lun_map
+}
+
+
+output "lun_map_names" {
+  value = local.lun_map_names
+}
+
+output "luns" {
+  value = local.luns
+}
+
+output "data_disk_size" {
+  value = local.data_disk_size
+}
+
+output "data_disk_type" {
+  value = local.data_disk_type
+}
+
+output "var_disks" {
+
+  value =  values(var.data_disks)[1].disk_type
+}
+
+
+output "windows-vm" {
+  value = {for vm in module.windows_vm : vm.vm_name => vm.vm_id}
+}
+
+output "disks_ids" {
+  value = {for dskid in values(module.managed_disk)[*] : dskid.disk_name => dskid.disk_id}
+}
+
+

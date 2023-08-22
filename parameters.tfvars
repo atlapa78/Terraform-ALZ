@@ -12,18 +12,39 @@ createauditsta             = true
 creatediagsta              = true
 createalzvnet              = true
 create_vms                 = true
+create_mngd_disks          = true
 vm_number                  = 2
-disk_type                  = "Standard_LRS"
-disk_size                  = 4
-cache_mode                 = "None"
+# disk_type                  = "Standard_LRS"
+# disk_size                  = 4
+
+data_disks = {
+  disk0 = {
+    id        = 0
+    disk_size = 8
+    disk_type = "Standard_LRS"
+  }
+  disk1 = {
+    id        = 1
+    disk_size = 8
+    disk_type = "Premium_LRS"
+  }
+  disk2 = {
+    id        = 2
+    disk_size = 4
+    disk_type = "Premium_LRS"
+  }
+}
+
+cache_mode        = "None"
+number_mngd_disks = 3
 #########################################Parameters for virtual machine######################################################
-vm_size                    = "Standard_B2s"
-admin_username             = "eitadm"
-vm_publisher               = "MicrosoftWindowsServer"
-vm_offer                   = "WindowsServer"
-vm_sku                     = "2016-Datacenter"
-vm_version                 = "latest"
-keyvault_secret_name       = "Terraform-vm-password"
+vm_size              = "Standard_B2s"
+admin_username       = "eitadm"
+vm_publisher         = "MicrosoftWindowsServer"
+vm_offer             = "WindowsServer"
+vm_sku               = "2016-Datacenter"
+vm_version           = "latest"
+keyvault_secret_name = "Terraform-vm-password"
 #########################################Parameters for virtual machine######################################################
 
 
