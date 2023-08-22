@@ -178,25 +178,25 @@ variable "vm_purpose" {
   description = "Map of the purpose for virtual machines"
   type        = map(any)
   default = {
-    domaincontroller   = "dc"
-    webserver          = "web"
-    appserver          = "app"
-    databaseserver     = "db"
-    fileserver         = "fs"
-    sapserver          = "sap"
-    proxyserver        = "pxs"    
+    domaincontroller = "dc"
+    webserver        = "web"
+    appserver        = "app"
+    databaseserver   = "db"
+    fileserver       = "fs"
+    sapserver        = "sap"
+    proxyserver      = "pxs"
   }
 }
 
 variable "create_vms" {
-  type                 = bool
-  description          = "value used for the vm creation"
-  
+  type        = bool
+  description = "value used for the vm creation"
+
 }
 
-variable "vm_number"  {
-  type                 = number
-  description          = "number of domain controllers to be created"
+variable "vm_number" {
+  type        = number
+  description = "number of domain controllers to be created"
 }
 
 variable "vm_size" {
@@ -243,16 +243,28 @@ variable "keyvault_secret_name" {
 
 
 ################################################Managed Disks variables################################################
-variable "disk_type" {
-  type        = string
-  description = "type of the managed disk. Possible values are Standard_LRS, StandardSSD_ZRS, Premium_LRS, PremiumV2_LRS, Premium_ZRS, StandardSSD_LRS or UltraSSD_LRS."
-  default     = "Standard_LRS"
+
+variable "number_mngd_disks" {
+  type        = number
+  description = "Number of managed data disks for the vms"
 }
 
-variable "disk_size" {
-  type        =  number
-  description = "value"
+variable "create_mngd_disks" {
+  type        = bool
+  description = "Variable to create or not managed disks"
 }
+
+variable "data_disks" {
+  description = "Size and tye of the data disks"
+  type        = map(any)
+  default = {
+    disk_type = "Standard_LRS"
+    disk_size = 4
+  }
+}
+
+
+
 
 ################################################Managed Disks variables################################################
 
