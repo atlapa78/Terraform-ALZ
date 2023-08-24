@@ -249,7 +249,7 @@ variable "number_mngd_disks" {
   description = "Number of managed data disks for the vms"
 }
 
-variable "create_mngd_disks" {
+variable "create_data_disks" {
   type        = bool
   description = "Variable to create or not managed disks"
 }

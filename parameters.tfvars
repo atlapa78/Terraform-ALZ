@@ -12,10 +12,8 @@ createauditsta             = true
 creatediagsta              = true
 createalzvnet              = true
 create_vms                 = true
-create_mngd_disks          = true
-vm_number                  = 2
-# disk_type                  = "Standard_LRS"
-# disk_size                  = 4
+create_data_disks          = true
+vm_number                  = 3
 
 data_disks = {
   disk0 = {

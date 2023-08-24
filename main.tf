@@ -144,12 +144,17 @@ module "windows_vm" {
   vm_version           = var.vm_version
   keyvault_secret_name = var.keyvault_secret_name
 
-  depends_on = [module.vnet_alz]
+  depends_on = [
+    module.vnet_alz,
+    module.keyvault
+  ]
+
 }
 
 module "managed_disk" {
   source    = "./managed_disk"
-  for_each  = local.luns
+  //for_each  = local.luns
+  for_each  = var.create_data_disks ? local.luns : { }
   disk_name = each.key  
   location  = var.location
   rgname    = module.infrastructurerg.rg_name
@@ -164,7 +169,8 @@ module "managed_disk" {
 
 module "disk_attachment" {
   source               = "./mngd_disk_attachment"
-  for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
+  for_each = length(module.managed_disk) < 1 ? {} : {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
+  //for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
   disk_id              = each.value
   vm_id                = lookup({for vm in module.windows_vm : vm.vm_name => vm.vm_id}, substr(each.key,0,11))
   lun_id               = tonumber(lookup(local.luns,each.key))
