@@ -57,8 +57,8 @@ variable "vm_version" {
 }
 
 
-variable "keyvault_secret_name" {
+variable "vm_password" {
   type        = string
-  description = "virtual machine secret name"
+  description = "virtual machine password"
   default     = "vmpassword"
 }

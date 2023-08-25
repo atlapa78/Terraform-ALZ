@@ -18,7 +18,7 @@ locals {
     }
   ]
   luns = { for k in local.lun_map : k.datadisk_name => k.lun }
- // attachment = [for disk in toset(values(module.managed_disks)[*]) : disk.disk_name => disk.disk_id]
+ 
 }
 
 
@@ -74,7 +74,7 @@ module "operationallogsWS" {
 
 module "keyvault" {
   source                     = "./keyvault"
-  count                      = var.createalzkv ? 1 : 0
+  count                      = var.createalzkv ? 1 : null
   rgname                     = module.keyvaultrg.rg_name
   location                   = var.location
   vault_name                 = lower("${var.CustomerID}-alz-${var.regions[var.location]}-kv")
@@ -82,17 +82,15 @@ module "keyvault" {
   object_id                  = local.current_user_id
   sku_name                   = var.keyvault_sku
   soft_delete_retention_days = var.soft_delete_retention_days
-  #   access_policy {
-  #     tenant_id = data.azurerm_client_config.current.tenant_id
-  #     object_id = local.current_user_id
-
-  #     key_permissions    = var.key_permissions
-  #     secret_permissions = var.secret_permissions
-  #   }
-
   depends_on = [module.keyvaultrg]
 }
 
+module "secret_key" {
+  source                     = "./secret_key"
+  keyvault_secret_name       = var.keyvault_secret_name
+  key_vault_id               = module.keyvault[0].azurerm_key_vault_id
+  depends_on = [ module.keyvault ]
+}
 
 module "audit_sa" {
   source                   = "./storageaccount"
@@ -126,8 +124,6 @@ module "vnet_alz" {
   environment   = var.environment
 }
 
-
-
 module "windows_vm" {
   source               = "./vm"
   count                = var.create_vms ? var.vm_number : 0
@@ -142,8 +138,7 @@ module "windows_vm" {
   vm_offer             = var.vm_offer
   vm_sku               = var.vm_sku
   vm_version           = var.vm_version
-  keyvault_secret_name = var.keyvault_secret_name
-
+  vm_password          = module.secret_key.key_vault_secret
   depends_on = [
     module.vnet_alz,
     module.keyvault
@@ -231,4 +226,7 @@ output "disks_ids" {
   value = {for dskid in values(module.managed_disk)[*] : dskid.disk_name => dskid.disk_id}
 }
 
+output "keyvault"{
+  value = module.keyvault
+}
 

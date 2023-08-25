@@ -1,4 +1,4 @@
-CustomerID                 = "sbx"
+CustomerID                 = "att"
 location                   = "eastus"
 environment                = "alz"
 laws_sku                   = "PerGB2018"
@@ -13,7 +13,7 @@ creatediagsta              = true
 createalzvnet              = true
 create_vms                 = true
 create_data_disks          = true
-vm_number                  = 3
+vm_number                  = 2
 
 data_disks = {
   disk0 = {

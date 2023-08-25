@@ -53,3 +53,4 @@ variable "soft_delete_retention_days" {
   type        = number
   description = "Number of day for the retention"
 }
+
