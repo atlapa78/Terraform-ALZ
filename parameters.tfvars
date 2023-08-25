@@ -1,4 +1,4 @@
-CustomerID                 = "att"
+CustomerID                 = "cvg"
 location                   = "eastus"
 environment                = "alz"
 laws_sku                   = "PerGB2018"
