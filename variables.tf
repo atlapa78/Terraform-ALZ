@@ -61,6 +61,11 @@ variable "location" {
   type        = string
   description = "location of the resources"
 }
+
+variable "location2" {
+  type        = string
+  description = "Paired region of location"
+}
 ######################General purpose variables##########################
 
 ######################Log Analitycs Workspace variables##########################
@@ -148,9 +153,15 @@ variable "account_replication_type" {
 
 
 ######################Azure Vnet variables##########################
-variable "createalzvnet" {
+variable "createhub1" {
   type        = bool
-  description = "used for audit keyvault creation"
+  description = "used for vnet hub1 creation"
+  default     = true
+}
+
+variable "createhub2" {
+  type        = bool
+  description = "used for vnet hub2 creation"
   default     = true
 }
 
@@ -159,13 +170,32 @@ variable "environment" {
   type        = string
 }
 
-variable "address_space" {
-  description = "CIDR of the vnet"
+variable "address_space_hub1" {
+  description = "CIDR of the vnet for hub1"
+  type        = list(any)
+}
+
+variable "address_space_hub2" {
+  description = "CIDR of the vnet for hub2"
   type        = list(any)
 }
 
 
-variable "subnets" {
+variable "address_space_shared" {
+  description = "CIDR of the vnet for shared"
+  type        = list(any)
+}
+
+variable "subnets_hub1" {
+  type = map(any)
+}
+
+variable "subnets_hub2" {
+  type = map(any)
+}
+
+
+variable "subnets_shared" {
   type = map(any)
 }
 

@@ -21,68 +21,101 @@ locals {
  
 }
 
-
-module "auditlogsrg" {
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+############################################AUDIT SUBSCRIPTION######################################################################################
+module "auditlogs_RG" {
   source   = "./resourcegroup"
-  rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
+  //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
+  rgname = "auditlogs-glb-rg"
   location = var.location
 }
 
-module "keyvaultrg" {
+module "monitoring_RG" {
   source   = "./resourcegroup"
-  rgname   = lower("${var.CustomerID}-keyvault-alz-${var.regions[var.location]}-rg")
+  //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
+  rgname = "monitoring-glb-rg"
   location = var.location
 }
 
-module "networkrg" {
-  source   = "./resourcegroup"
-  rgname   = lower("${var.CustomerID}-network-alz-${var.regions[var.location]}-rg")
-  location = var.location
-}
-
-module "operationallogsrg" {
-  source   = "./resourcegroup"
-  rgname   = lower("${var.CustomerID}-operationallogs-alz-${var.regions[var.location]}-rg")
-  location = var.location
-}
-
-module "infrastructurerg" {
-  source   = "./resourcegroup"
-  rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
-  location = var.location
-}
-
-module "auditlogsWS" {
+module "auditlogs_WS" {
   source         = "./loganalyticsWS"
-  rgname         = module.auditlogsrg.rg_name
+  rgname         = module.auditlogs_RG.rg_name
   location       = var.location
   laws_name      = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-workspace")
   laws_sku       = var.laws_sku
   retention_days = var.retention_days
-  depends_on     = [module.auditlogsrg]
+  depends_on     = [module.auditlogs_RG]
 }
 
-module "operationallogsWS" {
+module "audit_SA" {
+  source                   = "./storageaccount"
+  count                    = var.createauditsta ? 1 : 0
+  storageaccountname       = lower("${var.CustomerID}auditsaalz${var.regions[var.location]}sta")
+  rgname                   = module.auditlogs_RG.rg_name
+  location                 = var.location
+  account_tier             = var.account_tier
+  account_replication_type = var.account_replication_type
+  depends_on     = [module.auditlogs_RG]
+}
+
+############################################AUDIT SUBSCRIPTION######################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+
+############################################MANAGEMENT SUBSCRIPTION######################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+# module "monitoring_mgmt_RG" {
+#   source   = "./resourcegroup"
+#   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
+#   rgname = "monitoring-glb-rg"
+#   location = var.location
+# }
+
+module "costmgmt_RG" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
+  rgname = "costmgmt-glb-rg"
+  location = var.location
+}
+
+module "keyvault_RG" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-keyvault-alz-${var.regions[var.location]}-rg")
+  rgname = "keys-glb-rg"
+  location = var.location
+}
+
+
+module "operationallogs_WS" {
   source         = "./loganalyticsWS"
-  rgname         = module.operationallogsrg.rg_name
+  //rgname         = module.operationallogsrg.rg_name
+  rgname = module.keyvault_RG.rg_name
   location       = var.location
   laws_name      = lower("${var.CustomerID}-operationallogs-alz-${var.regions[var.location]}-workspace")
   laws_sku       = var.laws_sku
   retention_days = var.retention_days
-  depends_on     = [module.operationallogsrg]
+  depends_on     = [module.keyvault_RG]
 }
 
 module "keyvault" {
   source                     = "./keyvault"
   count                      = var.createalzkv ? 1 : null
-  rgname                     = module.keyvaultrg.rg_name
+  //rgname                     = module.keyvaultrg.rg_name
+  rgname = module.keyvault_RG.rg_name
   location                   = var.location
   vault_name                 = lower("${var.CustomerID}-alz-${var.regions[var.location]}-kv")
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   object_id                  = local.current_user_id
   sku_name                   = var.keyvault_sku
   soft_delete_retention_days = var.soft_delete_retention_days
-  depends_on = [module.keyvaultrg]
+  depends_on = [module.keyvault_RG]
 }
 
 module "secret_key" {
@@ -92,35 +125,105 @@ module "secret_key" {
   depends_on = [ module.keyvault ]
 }
 
-module "audit_sa" {
-  source                   = "./storageaccount"
-  count                    = var.createauditsta ? 1 : 0
-  storageaccountname       = lower("${var.CustomerID}auditsaalz${var.regions[var.location]}sta")
-  rgname                   = module.auditlogsrg.rg_name
-  location                 = var.location
-  account_tier             = var.account_tier
-  account_replication_type = var.account_replication_type
-}
 
 
-module "operational_sa" {
+
+module "management_SA" {
   source                   = "./storageaccount"
   count                    = var.creatediagsta ? 1 : 0
   storageaccountname       = lower("${var.CustomerID}diagalz${var.regions[var.location]}sta")
-  rgname                   = module.operationallogsrg.rg_name
+  rgname                   = module.costmgmt_RG.rg_name
   location                 = var.location
   account_tier             = var.account_tier
   account_replication_type = var.account_replication_type
+  depends_on = [ module.costmgmt_RG ]
 }
 
-module "vnet_alz" {
+############################################MANAGEMENT SUBSCRIPTION#################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+
+############################################CONNECTIVITY SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+module "network_RG" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-network-alz-${var.regions[var.location]}-rg")
+  rgname = lower("network-${var.regions[var.location]}-rg")
+  location = var.location
+}
+
+module "hub_vnet_rgn1" {
   source = "./vnet"
-  //count         = var.createalzvnet ? 1 : 0
-  vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
-  rgname        = module.networkrg.rg_name
+  //count         = var.createhub1 ? 1 : 0
+  //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
+  vnetname = lower("hubvnet-${var.regions[var.location]}1")
+  rgname        = module.network_RG.rg_name
   location      = var.location
-  address_space = var.address_space
-  subnets       = var.subnets
+  address_space = var.address_space_hub1
+  subnets       = var.subnets_hub1
+  environment   = var.environment
+}
+
+
+module "hub_vnet_rgn2" {
+  source = "./vnet"
+  count         = var.createhub2 ? 1 : 0
+  //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location2]}-vnet")
+  vnetname = lower("hubvnet-${var.regions[var.location2]}2")
+  rgname        = module.network_RG.rg_name
+  location      = var.location2
+  address_space = var.address_space_hub2
+  subnets       = var.subnets_hub2
+  environment   = var.environment
+}
+
+############################################CONNECTIVITY SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+
+############################################SHARED SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+
+module "sharednetwork_RG" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-operationallogs-alz-${var.regions[var.location]}-rg")
+  rgname   = lower("shared-network-${var.regions[var.location]}-rg")
+  location = var.location
+}
+
+module "backup_RG" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
+  rgname   = lower("backup-${var.regions[var.location]}-rg")
+  location = var.location
+}
+
+module "aads_RG" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
+  rgname   = lower("aads-${var.regions[var.location]}-rg")
+  location = var.location
+}
+
+module "shared_vnet" {
+  source = "./vnet"
+  //count         = var.createhub1 ? 1 : 0
+  //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
+  vnetname      = lower("sharedvnet-${var.regions[var.location]}")
+  rgname        = module.sharednetwork_RG.rg_name
+  location      = var.location
+  address_space = var.address_space_shared
+  subnets       = var.subnets_shared
   environment   = var.environment
 }
 
@@ -128,8 +231,8 @@ module "windows_vm" {
   source               = "./vm"
   count                = var.create_vms ? var.vm_number : 0
   location             = var.location
-  rgname               = module.infrastructurerg.rg_name
-  subnet_id            = module.vnet_alz.subnetiddc
+  rgname               = module.aads_RG.rg_name
+  subnet_id            = module.shared_vnet.subnetiddc
   keyvault_id          = module.keyvault[0].azurerm_key_vault_id
   vm_name              = lower("${var.CustomerID}dc${var.regions[var.location]}p0${count.index}")
   vm_size              = var.vm_size
@@ -140,8 +243,9 @@ module "windows_vm" {
   vm_version           = var.vm_version
   vm_password          = module.secret_key.key_vault_secret
   depends_on = [
-    module.vnet_alz,
-    module.keyvault
+    module.aads_RG,
+    module.keyvault,
+    module.shared_vnet
   ]
 
 }
@@ -152,12 +256,12 @@ module "managed_disk" {
   for_each  = var.create_data_disks ? local.luns : { }
   disk_name = each.key  
   location  = var.location
-  rgname    = module.infrastructurerg.rg_name
+  rgname    = module.aads_RG.rg_name
   disk_type = values(var.data_disks)[each.value].disk_type
   disk_size = values(var.data_disks)[each.value].disk_size
   depends_on = [
     module.windows_vm,
-    module.infrastructurerg
+    module.aads_RG
    ]
 }
 
@@ -175,6 +279,23 @@ module "disk_attachment" {
     module.windows_vm
   ]
 }
+
+module "shared_SA" {
+  source                   = "./storageaccount"
+  count                    = var.creatediagsta ? 1 : 0
+  storageaccountname       = lower("shared${var.regions[var.location]}sta")
+  rgname                   = module.aads_RG.rg_name
+  location                 = var.location
+  account_tier             = var.account_tier
+  account_replication_type = var.account_replication_type
+  depends_on = [ module.aads_RG ]
+}
+
+############################################SHARED SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
 
 output "vm_names" {
   value = local.vm_w_mndg_disks

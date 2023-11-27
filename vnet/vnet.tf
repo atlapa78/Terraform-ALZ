@@ -1,8 +1,3 @@
-# resource "azurerm_resource_group" "avdrg" {
-#   name     = var.rgname
-#   location = var.location
-# }
-
 resource "azurerm_network_security_group" "alznsg" {
   location            = var.location
   resource_group_name = var.rgname
@@ -13,7 +8,7 @@ resource "azurerm_network_security_group" "alznsg" {
   #   name = each.value.createsg ? each.value.security_group : ""
 }
 
-resource "azurerm_virtual_network" "avdvnet" {
+resource "azurerm_virtual_network" "hubvnet" {
   #name                = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
   name                = var.vnetname
   address_space       = var.address_space
@@ -37,7 +32,7 @@ resource "azurerm_virtual_network" "avdvnet" {
 resource "azurerm_route_table" "sharedrt" {
   name                          = "shared-rt"
   location                      = var.location
-  resource_group_name           = azurerm_virtual_network.avdvnet.resource_group_name
+  resource_group_name           = azurerm_virtual_network.hubvnet.resource_group_name
   disable_bgp_route_propagation = false
   route {
     name           = "sharedrt"
@@ -47,16 +42,16 @@ resource "azurerm_route_table" "sharedrt" {
 }
 
 resource "azurerm_subnet_route_table_association" "sharedrtasso" {
-  subnet_id      = element(azurerm_virtual_network.avdvnet.subnet[*].id, 5)
+  subnet_id      = element(azurerm_virtual_network.hubvnet.subnet[*].id, 5)
   route_table_id = azurerm_route_table.sharedrt.id
   depends_on = [
-    azurerm_virtual_network.avdvnet
+    azurerm_virtual_network.hubvnet
   ]
 }
 
-output "subnetids" {
-  value = index(azurerm_virtual_network.avdvnet.subnet[*].name, "GatewaySubnet")
-}
+# output "subnetids" {
+#   value = index(azurerm_virtual_network.hubvnet.subnet[*].name, "GatewaySubnet")
+# }
 
 output "nsgids" {
   value = keys(azurerm_network_security_group.alznsg)
