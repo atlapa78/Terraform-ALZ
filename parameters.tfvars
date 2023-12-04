@@ -1,4 +1,4 @@
-CustomerID                 = "rtn"
+CustomerID                 = "cu7"
 location                   = "eastus"
 location2                  = "westus"
 environment                = "alz"
@@ -16,22 +16,33 @@ createhub2                 = false
 create_vms                 = true
 create_data_disks          = true
 vm_number                  = 2
+rsv_sku                    = "Standard"
+vault_name                 = "backup"
+aut_acc_name               = "automation"
+aut_acc_sku                = "Basic"
+frontend_name              = "app-LB"
+allocation_method          = "Static"
+load_balancer_name         = "app_lb"
+load_balancer_sku          = "Standard"
+private_ip_allocation      = "Static"
+private_ip                 = "10.46.0.133"
 
-data_disks = {
-  disk0 = {
-    id        = 0
-    disk_size = 8
-    disk_type = "Standard_LRS"
+
+data_disks                 = {
+  disk0                  = {
+    id                 = 0
+    disk_size          = 8
+    disk_type          = "Standard_LRS"
   }
-  disk1 = {
-    id        = 1
-    disk_size = 8
-    disk_type = "Premium_LRS"
+  disk1                  = {
+    id                 = 1
+    disk_size          = 8
+    disk_type          = "Premium_LRS"
   }
-  disk2 = {
-    id        = 2
-    disk_size = 4
-    disk_type = "Premium_LRS"
+  disk2                  = {
+    id                 = 2
+    disk_size          = 4
+    disk_type          = "Premium_LRS"
   }
 }
 
@@ -49,10 +60,10 @@ keyvault_secret_name = "Terraform-vm-password"
 
 
 
-address_space_hub1 = ["10.41.0.0/22"]
-address_space_hub2 = ["10.42.0.0/22"]
+address_space_hub1   = ["10.41.0.0/22"]
+address_space_hub2   = ["10.42.0.0/22"]
 address_space_shared = ["10.45.0.0/22"]
-
+address_app_network  = ["10.46.0.0/22"]
 
 subnets_hub1 = {
   subnet0 = {
@@ -125,6 +136,31 @@ subnets_shared = {
 #   }  
 }
 
+app_subnets   = {
+  subnet0 = {
+    index          = 0
+    name           = "AppSubnet"
+    address_prefix = "10.46.0.0/25"
+    security_group = "AppSubnet-nsg" //added code for seg inside the subnet map if doesnt work remove the code
+    creatensg      = false                     //added code for seg inside the subnet map if doesnt work remove the code 
+}
+  subnet1 = {
+    index          = 1
+    name           = "LBsubnet"
+    address_prefix = "10.46.0.128/25"
+    security_group = "LBsubnet-nsg"
+    creatensg      = false
+  }  
+
+  subnet2 = {
+    index          = 2
+    name           = "DBSubnet"
+    address_prefix = "10.46.3.0/26"
+    security_group = "DBSubnet-nsg"
+    creatensg      = false
+  }
+
+}
 
 
 # subnets = {

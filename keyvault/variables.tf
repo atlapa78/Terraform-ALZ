@@ -1,4 +1,4 @@
-variable "vault_name" {
+variable "key_vault_name" {
   type        = string
   description = "resource group for key vault"
 }

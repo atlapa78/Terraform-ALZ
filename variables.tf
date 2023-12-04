@@ -186,6 +186,11 @@ variable "address_space_shared" {
   type        = list(any)
 }
 
+variable "address_app_network" {
+  description = "CIDR of the vnet for app workload"
+  type        = list(any)
+}
+
 variable "subnets_hub1" {
   type = map(any)
 }
@@ -197,6 +202,23 @@ variable "subnets_hub2" {
 
 variable "subnets_shared" {
   type = map(any)
+}
+
+variable "app_subnets" {
+  type = map(any)
+}
+
+variable "frontend_name" {
+  type        = string
+  description = "Name of the public IP for frontend LB"
+  
+}
+
+variable "allocation_method" {
+  type        = string
+  description = "(Required) Defines the allocation method for this IP address. Possible values are Static or Dynamic"
+  default     = "Dynamic"
+  
 }
 
 ######################Azure Vnet variables##########################
@@ -298,9 +320,60 @@ variable "data_disks" {
 
 ################################################Managed Disks variables################################################
 
-################################################Managed Disks Attachemntvariables################################################
+################################################Managed Disks Attachemnt variables################################################
 variable "cache_mode" {
   type        = string
   description = "Caching mode for the managed disk. Possible values include None, ReadOnly and ReadWrite"
 }
-################################################Managed Disks Attachemntvariables################################################
+################################################Managed Disks Attachemnt variables################################################
+
+################################################Recovery Service Vault variables################################################
+variable "vault_name" {
+  type = string
+  description = "Name used for the recovery services vault"
+  
+}
+
+variable "rsv_sku" {
+  type = string
+  description = "(Required) Sets the vault's SKU. Possible values include: Standard, RS0."
+  default = "Standard"
+}
+
+################################################Recovery Service Vault variables################################################
+
+##################################################Automation Account variables##################################################
+variable "aut_acc_name" {
+  type        = string
+  description = "Name of the automation account"
+  
+}
+
+variable "aut_acc_sku" {
+  type        = string
+  description = " (Required) The SKU of the account. Possible values are Basic and Free"
+  default     = "free"  
+}
+##################################################Automation Account variables##################################################
+
+#####################################################Load Balancer variables####################################################
+variable "load_balancer_name" {
+  type = string
+  description = "Name of the Load Balancer"
+}
+
+variable "load_balancer_sku" {
+  type = string
+  description = "SKU of the Load Balancer, allowed values are Standard and Gateway"
+}
+
+variable "private_ip_allocation" {
+  type  = string
+  description = "Allocation type for the private IP address"  
+}
+
+variable "private_ip" {  
+  description = "The private IP for the load balancer"  
+}
+
+#####################################################Load Balancer variables####################################################

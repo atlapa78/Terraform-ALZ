@@ -66,7 +66,7 @@ module "audit_SA" {
 ####################################################################################################################################################
 
 
-############################################MANAGEMENT SUBSCRIPTION######################################################################################
+############################################MANAGEMENT SUBSCRIPTION#################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
@@ -110,7 +110,7 @@ module "keyvault" {
   //rgname                     = module.keyvaultrg.rg_name
   rgname = module.keyvault_RG.rg_name
   location                   = var.location
-  vault_name                 = lower("${var.CustomerID}-alz-${var.regions[var.location]}-kv")
+  key_vault_name                 = lower("${var.CustomerID}-alz-${var.regions[var.location]}-kv")
   tenant_id                  = data.azurerm_client_config.current.tenant_id
   object_id                  = local.current_user_id
   sku_name                   = var.keyvault_sku
@@ -125,9 +125,6 @@ module "secret_key" {
   depends_on = [ module.keyvault ]
 }
 
-
-
-
 module "management_SA" {
   source                   = "./storageaccount"
   count                    = var.creatediagsta ? 1 : 0
@@ -136,6 +133,15 @@ module "management_SA" {
   location                 = var.location
   account_tier             = var.account_tier
   account_replication_type = var.account_replication_type
+  depends_on = [ module.costmgmt_RG ]
+}
+
+module "mgmt_aut_acc" {
+  source                   = "./AZ_AUTO"
+  auto_name                = "${var.aut_acc_name}-${var.regions[var.location2]}-autacc"
+  location                 = var.location2
+  rgname                   = module.costmgmt_RG.rg_name  
+  aut_acc_sku              = var.aut_acc_sku
   depends_on = [ module.costmgmt_RG ]
 }
 
@@ -188,7 +194,7 @@ module "hub_vnet_rgn2" {
 ####################################################################################################################################################
 
 
-############################################SHARED SUBSCRIPTION###############################################################################
+##################################################SHARED SUBSCRIPTION###############################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
@@ -213,6 +219,14 @@ module "aads_RG" {
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
   rgname   = lower("aads-${var.regions[var.location]}-rg")
   location = var.location
+}
+
+module "az_rsv" {
+  source = "./AZ_RSV"
+  vault_name = lower("${var.vault_name}-${var.regions[var.location]}-rsv")
+  rgname = module.backup_RG.rg_name
+  location = var.location
+  depends_on = [ module.backup_RG ]
 }
 
 module "shared_vnet" {
@@ -291,63 +305,177 @@ module "shared_SA" {
   depends_on = [ module.aads_RG ]
 }
 
-############################################SHARED SUBSCRIPTION###############################################################################
+##################################################SHARED SUBSCRIPTION###############################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
 
 
-output "vm_names" {
-  value = local.vm_w_mndg_disks
 
+#####################################################PRD SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+module "app_network_rg" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
+  rgname   = lower("app-network${var.regions[var.location]}-rg")
+  location = var.location
 }
 
-output "data_dsk" {
-  value = local.data_disk_id
+module "app_workload_rg" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
+  rgname   = lower("app-workload${var.regions[var.location]}-rg")
+  location = var.location
 }
 
-output "disks_names" {
+module "app_vnet" {
+  source = "./vnet"
+  //count         = var.createhub1 ? 1 : 0
+  //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
+  vnetname = lower("app-${var.regions[var.location]}-vnet")
+  rgname        = module.app_network_rg.rg_name
+  location      = var.location
+  address_space = var.address_app_network
+  subnets       = var.app_subnets
+  environment   = var.environment
+}
 
-  value = local.disks_names_id
+module "lb_frontend" {
+  source            = "./AZ_PIP"
+  location          = var.location
+  pip_name          = var.frontend_name
+  rgname            = module.app_network_rg.rg_name
+  allocation_method = var.allocation_method
+}
+
+module "load_balancer" {
+  source               = "./AZ_LB"
+  az_lb_name           = var.load_balancer_name
+  location             = var.location 
+  rgname               = module.app_network_rg.rg_name
+  lb_sku               = var.load_balancer_sku
+  frontend_name        = module.lb_frontend.pip_name
+  private_ip_allocation = var.private_ip_allocation
+  private_ip            = var.private_ip
+  //public_ip_address_id = module.lb_frontend.pip_id  
+  subnet_lb_id         = element(module.app_vnet.subnetlbid,0)
+}
+
+#####################################################PRD SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+
+
+
+######################################################DR SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+module "recovery_rg" {
+  source   = "./resourcegroup"
+  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
+  rgname   = lower("recovery${var.regions[var.location2]}-rg")
+  location = var.location2
 }
 
 
-output "lun_map" {
-  value = local.lun_map
+module "recovery_SA" {
+  source                   = "./storageaccount"
+  count                    = var.createauditsta ? 1 : 0
+  storageaccountname       = lower("${var.CustomerID}recovery${var.regions[var.location2]}sta")
+  rgname                   = module.recovery_rg.rg_name
+  location                 = var.location2
+  account_tier             = var.account_tier
+  account_replication_type = var.account_replication_type
+  depends_on     = [module.recovery_rg]
 }
 
 
-output "lun_map_names" {
-  value = local.lun_map_names
-}
-
-output "luns" {
-  value = local.luns
-}
-
-output "data_disk_size" {
-  value = local.data_disk_size
-}
-
-output "data_disk_type" {
-  value = local.data_disk_type
-}
-
-output "var_disks" {
-
-  value =  values(var.data_disks)[1].disk_type
+module "dr_aut_acc" {
+  source                   = "./AZ_AUTO"
+  auto_name                = "recovery-${var.regions[var.location2]}-autacc"
+  location                 = var.location2
+  rgname                   = module.recovery_rg.rg_name
+  aut_acc_sku              = var.aut_acc_sku
+  depends_on = [ module.recovery_rg ]
 }
 
 
-output "windows-vm" {
-  value = {for vm in module.windows_vm : vm.vm_name => vm.vm_id}
+module "dr_rsv" {
+  source = "./AZ_RSV"
+  vault_name = lower("dr-${var.regions[var.location2]}-rsv")
+  rgname = module.recovery_rg.rg_name
+  location = var.location2
+  depends_on = [ module.recovery_rg ]
 }
 
-output "disks_ids" {
-  value = {for dskid in values(module.managed_disk)[*] : dskid.disk_name => dskid.disk_id}
-}
+######################################################DR SUBSCRIPTION###############################################################################
+####################################################################################################################################################
+####################################################################################################################################################
+####################################################################################################################################################
 
-output "keyvault"{
-  value = module.keyvault
+
+
+
+
+# output "vm_names" {
+#   value = local.vm_w_mndg_disks
+
+# }
+
+# output "data_dsk" {
+#   value = local.data_disk_id
+# }
+
+# output "disks_names" {
+
+#   value = local.disks_names_id
+# }
+
+
+# output "lun_map" {
+#   value = local.lun_map
+# }
+
+
+# output "lun_map_names" {
+#   value = local.lun_map_names
+# }
+
+# output "luns" {
+#   value = local.luns
+# }
+
+# output "data_disk_size" {
+#   value = local.data_disk_size
+# }
+
+# output "data_disk_type" {
+#   value = local.data_disk_type
+# }
+
+# output "var_disks" {
+
+#   value =  values(var.data_disks)[1].disk_type
+# }
+
+
+# output "windows-vm" {
+#   value = {for vm in module.windows_vm : vm.vm_name => vm.vm_id}
+# }
+
+# output "disks_ids" {
+#   value = {for dskid in values(module.managed_disk)[*] : dskid.disk_name => dskid.disk_id}
+# }
+
+# output "keyvault"{
+#   value = module.keyvault
+# }
+
+output "subnetlbid1" {
+  value = element(module.app_vnet.subnetlbid,0)
 }
 

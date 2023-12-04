@@ -1,5 +1,5 @@
 resource "azurerm_key_vault" "keyvault" {
-  name                       = var.vault_name
+  name                       = var.key_vault_name
   location                   = var.location
   resource_group_name        = var.rgname
   tenant_id                  = var.tenant_id
