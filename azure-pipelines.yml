@@ -67,13 +67,14 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'plan'
-              commandOptions: '-var-file .\parameters.tfvars'
+              commandOptions: '-var-file parameters.tfvars'
               environmentServiceNameAzureRM: 'terraform SP - AZ -Students'
           - task: TerraformTaskV4@4
             displayName: Apply
             inputs:
               provider: 'azurerm'
               command: 'apply'
+              commandOptions: '-var-file parameters.tfvars'
               environmentServiceNameAzureRM: 'terraform SP - AZ -Students'
 
 
