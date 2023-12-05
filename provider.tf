@@ -14,6 +14,14 @@ terraform {
   }
 }
 
+backend "azurerm" {
+
+  resource_group_name  = "Terraform-lab-rg"
+  storage_account_name = "alcavdes1tsa1"
+  container_name       = "terraform"
+  key                  = "terraform.tfstate"
+}
+
 provider "azurerm" { }
 //   features {}
 //   subscription_id = "5f94af94-2e21-425d-a715-e2b7df92f974"
