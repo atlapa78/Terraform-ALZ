@@ -13,7 +13,7 @@ variables:
   bkstrgrg: 'Terraform-lab-rg'
   bkstrg: 'alcavdes1tsa1'
   bkcontainer: 'terraform'
-  bkstrgkey: 'terraformalz.tfstate'
+  bkstrgkey: 'terraform.tfstate'
 
 stages:
   - stage: tfvalidate
@@ -30,7 +30,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              commandOptions: '-migrate-state'
+              #commandOptions: '-migrate-state'
               backendServiceArm: 'terraform SP - AZ -Students'
               backendAzureRmResourceGroupName: '$(bkstrgrg)'
               backendAzureRmStorageAccountName: '$(bkstrg)'
@@ -57,7 +57,7 @@ stages:
               provider: 'azurerm'
               command: 'init'
               backendServiceArm: 'terraform SP - AZ -Students'
-              backendAzureRmResourceGroupName: '$(bkstgrg)'
+              backendAzureRmResourceGroupName: '$(bkstrgrg)'
               backendAzureRmStorageAccountName: '$(bkstrg)'
               backendAzureRmContainerName: '$(bkcontainer)'
               backendAzureRmKey: '$(bkstrgkey)' 
