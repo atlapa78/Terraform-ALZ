@@ -26,7 +26,7 @@ locals {
 ####################################################################################################################################################
 ############################################AUDIT SUBSCRIPTION######################################################################################
 module "auditlogs_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
   rgname   = "auditlogs-glb-rg"
   location = var.location
@@ -37,7 +37,7 @@ module "auditlogs_RG" {
 }
 
 module "auditlogs_WS" {
-  source         = "./loganalyticsWS"
+  source         = "./az_log_analitycs"
   rgname         = module.auditlogs_RG.rg_name
   location       = var.location
   laws_name      = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-workspace")
@@ -56,7 +56,7 @@ module "auditlogs_WS" {
 }
 
 module "audit_SA" {
-  source                   = "./storageaccount"
+  source                   = "./az_storage_account"
   count                    = var.createauditsta ? 1 : 0
   storageaccountname       = lower("${var.CustomerID}auditsaalz${var.regions[var.location]}sta")
   rgname                   = module.auditlogs_RG.rg_name
@@ -87,14 +87,14 @@ module "audit_SA" {
 ####################################################################################################################################################
 
 # module "monitoring_mgmt_RG" {
-#   source   = "./resourcegroup"
+#   source   = "./az_resource_group"
 #   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
 #   rgname = "monitoring-glb-rg"
 #   location = var.location
 # }
 
 module "monitoring_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
   rgname   = "monitoring-glb-rg"
   location = var.location
@@ -105,7 +105,7 @@ module "monitoring_RG" {
 }
 
 module "costmgmt_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
   rgname   = "costmgmt-glb-rg"
   location = var.location
@@ -116,7 +116,7 @@ module "costmgmt_RG" {
 }
 
 module "keyvault_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-keyvault-alz-${var.regions[var.location]}-rg")
   rgname   = "keys-glb-rg"
   location = var.location
@@ -128,7 +128,7 @@ module "keyvault_RG" {
 
 
 module "operationallogs_WS" {
-  source = "./loganalyticsWS"
+  source = "./az_log_analitycs"
   //rgname         = module.operationallogsrg.rg_name
   rgname         = module.keyvault_RG.rg_name
   location       = var.location
@@ -148,7 +148,7 @@ module "operationallogs_WS" {
 }
 
 module "keyvault" {
-  source = "./keyvault"
+  source = "./az_keyvault"
   count  = var.createalzkv ? 1 : null
   //rgname                     = module.keyvaultrg.rg_name
   rgname                     = module.keyvault_RG.rg_name
@@ -171,7 +171,7 @@ module "keyvault" {
 }
 
 module "secret_key" {
-  source               = "./secret_key"
+  source               = "./az_secret_key"
   keyvault_secret_name = var.keyvault_secret_name
   key_vault_id         = module.keyvault[0].azurerm_key_vault_id
   tags_rsrc = {
@@ -187,7 +187,7 @@ module "secret_key" {
 }
 
 module "management_SA" {
-  source                   = "./storageaccount"
+  source                   = "./az_storage_account"
   count                    = var.creatediagsta ? 1 : 0
   storageaccountname       = lower("${var.CustomerID}diagalz${var.regions[var.location]}sta")
   rgname                   = module.costmgmt_RG.rg_name
@@ -207,7 +207,7 @@ module "management_SA" {
 }
 
 module "mgmt_aut_acc" {
-  source      = "./AZ_AUTO"
+  source      = "./az_automation_acc"
   auto_name   = "${var.aut_acc_name}-${var.regions[var.location2]}-autacc"
   location    = var.location2
   rgname      = module.costmgmt_RG.rg_name
@@ -236,7 +236,7 @@ module "mgmt_aut_acc" {
 ####################################################################################################################################################
 
 module "network_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-network-alz-${var.regions[var.location]}-rg")
   rgname   = lower("network-${var.regions[var.location]}-rg")
   location = var.location
@@ -247,7 +247,7 @@ module "network_RG" {
 }
 
 module "hub_vnet_rgn1" {
-  source = "./vnet"
+  source = "./az_virtual_network"
   //count         = var.createhub1 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
   vnetname      = lower("hubvnet-${var.regions[var.location]}1")
@@ -269,7 +269,7 @@ module "hub_vnet_rgn1" {
 }
 
 module "hub_vnet_rgn2" {
-  source = "./vnet"
+  source = "./az_virtual_network"
   count  = var.createhub2 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location2]}-vnet")
   vnetname      = lower("hubvnet-${var.regions[var.location2]}2")
@@ -302,7 +302,7 @@ module "hub_vnet_rgn2" {
 
 
 module "sharednetwork_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-operationallogs-alz-${var.regions[var.location]}-rg")
   rgname   = lower("shared-network-${var.regions[var.location]}-rg")
   location = var.location
@@ -313,7 +313,7 @@ module "sharednetwork_RG" {
 }
 
 module "backup_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
   rgname   = lower("backup-${var.regions[var.location]}-rg")
   location = var.location
@@ -324,7 +324,7 @@ module "backup_RG" {
 }
 
 module "aads_RG" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
   rgname   = lower("aads-${var.regions[var.location]}-rg")
   location = var.location
@@ -334,8 +334,8 @@ module "aads_RG" {
   }
 }
 
-module "az_rsv" {
-  source     = "./AZ_RSV"
+module "az_recovery_service_vault" {
+  source     = "./az_recovery_service_vault"
   vault_name = lower("${var.vault_name}-${var.regions[var.location]}-rsv")
   rgname     = module.backup_RG.rg_name
   location   = var.location
@@ -352,7 +352,7 @@ module "az_rsv" {
 }
 
 module "shared_vnet" {
-  source = "./vnet"
+  source = "./az_virtual_network"
   //count         = var.createhub1 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
   vnetname      = lower("sharedvnet-${var.regions[var.location]}")
@@ -373,7 +373,7 @@ module "shared_vnet" {
 }
 
 module "windows_vm" {
-  source         = "./vm"
+  source         = "./az_windows_vm"
   count          = var.create_vms ? var.vm_number : 0
   location       = var.location
   rgname         = module.aads_RG.rg_name
@@ -408,7 +408,7 @@ module "windows_vm" {
 }
 
 module "managed_disk" {
-  source = "./managed_disk"
+  source = "./az_managed_disk"
   //for_each  = local.luns
   for_each  = var.create_data_disks ? local.luns : {}
   disk_name = each.key
@@ -433,7 +433,7 @@ module "managed_disk" {
 
 
 module "disk_attachment" {
-  source   = "./mngd_disk_attachment"
+  source   = "./az_mngd_disk_attachment"
   for_each = length(module.managed_disk) < 1 ? {} : { for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id }
   //for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
   disk_id = each.value
@@ -447,7 +447,7 @@ module "disk_attachment" {
 }
 
 module "shared_SA" {
-  source                   = "./storageaccount"
+  source                   = "./az_storage_account"
   count                    = var.creatediagsta ? 1 : 0
   storageaccountname       = lower("shared${var.regions[var.location]}sta")
   rgname                   = module.aads_RG.rg_name
@@ -478,7 +478,7 @@ module "shared_SA" {
 ####################################################################################################################################################
 ####################################################################################################################################################
 module "app_network_rg" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
   rgname   = lower("app-network${var.regions[var.location]}-rg")
   location = var.location
@@ -489,7 +489,7 @@ module "app_network_rg" {
 }
 
 module "app_workload_rg" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
   rgname   = lower("app-workload${var.regions[var.location]}-rg")
   location = var.location
@@ -500,7 +500,7 @@ module "app_workload_rg" {
 }
 
 module "app_vnet" {
-  source = "./vnet"
+  source = "./az_virtual_network"
   //count         = var.createhub1 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
   vnetname      = lower("app-${var.regions[var.location]}-vnet")
@@ -521,7 +521,7 @@ module "app_vnet" {
 }
 
 module "lb_frontend" {
-  source            = "./AZ_PIP"
+  source            = "./az_public_IP"
   location          = var.location
   pip_name          = var.frontend_name
   rgname            = module.app_network_rg.rg_name
@@ -539,7 +539,7 @@ module "lb_frontend" {
 }
 
 module "load_balancer" {
-  source                = "./AZ_LB"
+  source                = "./az_load_balancer"
   az_lb_name            = var.load_balancer_name
   location              = var.location
   rgname                = module.app_network_rg.rg_name
@@ -572,7 +572,7 @@ module "load_balancer" {
 ####################################################################################################################################################
 ####################################################################################################################################################
 module "recovery_rg" {
-  source = "./resourcegroup"
+  source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
   rgname   = lower("recovery${var.regions[var.location2]}-rg")
   location = var.location2
@@ -584,7 +584,7 @@ module "recovery_rg" {
 
 
 module "recovery_SA" {
-  source                   = "./storageaccount"
+  source                   = "./az_storage_account"
   count                    = var.createauditsta ? 1 : 0
   storageaccountname       = lower("${var.CustomerID}recovery${var.regions[var.location2]}sta")
   rgname                   = module.recovery_rg.rg_name
@@ -605,7 +605,7 @@ module "recovery_SA" {
 
 
 module "dr_aut_acc" {
-  source      = "./AZ_AUTO"
+  source      = "./az_automation_acc"
   auto_name   = "recovery-${var.regions[var.location2]}-autacc"
   location    = var.location2
   rgname      = module.recovery_rg.rg_name
@@ -624,7 +624,7 @@ module "dr_aut_acc" {
 
 
 module "dr_rsv" {
-  source     = "./AZ_RSV"
+  source     = "./az_recovery_service_vault"
   vault_name = lower("dr-${var.regions[var.location2]}-rsv")
   rgname     = module.recovery_rg.rg_name
   location   = var.location2
@@ -696,11 +696,11 @@ module "dr_rsv" {
 # }
 
 # output "disks_ids" {
-#   value = {for dskid in values(module.managed_disk)[*] : dskid.disk_name => dskid.disk_id}
+#   value = {for dskid in values(module.az_managed_disk)[*] : dskid.disk_name => dskid.disk_id}
 # }
 
 # output "keyvault"{
-#   value = module.keyvault
+#   value = module.az_key_vault
 # }
 
 output "subnetlbid1" {
