@@ -29,7 +29,7 @@ stages:
             displayName: Init
             inputs:
               provider: 'azurerm'
-              command: 'init'
+              command: 'init -migrate-state'
               backendServiceArm: 'terraform SP - AZ -Students'
               backendAzureRmResourceGroupName: '$(bkstrgrg)'
               backendAzureRmStorageAccountName: '$(bkstrg)'
