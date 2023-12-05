@@ -3,5 +3,6 @@ resource "azurerm_public_ip" "pip" {
   location            = var.location
   resource_group_name = var.rgname
   allocation_method   = var.allocation_method
-  sku                 = "Standard"
+  sku                 = var.pip_sku
+  tags                = var.tags_rsrc
 }

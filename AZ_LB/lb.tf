@@ -3,13 +3,13 @@ resource "azurerm_lb" "az_lb" {
   location            = var.location
   resource_group_name = var.rgname
   sku                 = var.lb_sku
-  //type                = var.type
+  tags                = var.tags_rsrc
 
   frontend_ip_configuration {
-    name                          = var.frontend_name
+    name = var.frontend_name
     //public_ip_address_id = var.public_ip_address_id
     subnet_id                     = var.subnet_lb_id
     private_ip_address_allocation = var.private_ip_allocation
-    private_ip_address            = var.private_ip_allocation == "static" ? var.private_ip : null 
+    private_ip_address            = var.private_ip_allocation == "static" ? var.private_ip : null
   }
 }

@@ -23,7 +23,7 @@ resource "azurerm_windows_virtual_machine" "virtual-machine" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-
+  tags = var.tags_rsrc
   source_image_reference {
     publisher = var.vm_publisher
     offer     = var.vm_offer

@@ -12,6 +12,7 @@ resource "azurerm_key_vault_secret" "key_vault_secret" {
   name         = var.keyvault_secret_name
   value        = random_string.password.result
   key_vault_id = var.key_vault_id
+  tags         = var.tags_rsrc
 }
 
 

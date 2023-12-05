@@ -1,4 +1,4 @@
-CustomerID                 = "cu7"
+CustomerID                 = "cu8"
 location                   = "eastus"
 location2                  = "westus"
 environment                = "alz"
@@ -24,25 +24,26 @@ frontend_name              = "app-LB"
 allocation_method          = "Static"
 load_balancer_name         = "app_lb"
 load_balancer_sku          = "Standard"
-private_ip_allocation      = "Static"
+private_ip_allocation      = "static"
 private_ip                 = "10.46.0.133"
+pip_sku                    = "Standard"
 
 
-data_disks                 = {
-  disk0                  = {
-    id                 = 0
-    disk_size          = 8
-    disk_type          = "Standard_LRS"
+data_disks = {
+  disk0 = {
+    id        = 0
+    disk_size = 8
+    disk_type = "Standard_LRS"
   }
-  disk1                  = {
-    id                 = 1
-    disk_size          = 8
-    disk_type          = "Premium_LRS"
+  disk1 = {
+    id        = 1
+    disk_size = 8
+    disk_type = "Premium_LRS"
   }
-  disk2                  = {
-    id                 = 2
-    disk_size          = 4
-    disk_type          = "Premium_LRS"
+  disk2 = {
+    id        = 2
+    disk_size = 4
+    disk_type = "Premium_LRS"
   }
 }
 
@@ -72,14 +73,14 @@ subnets_hub1 = {
     address_prefix = "10.41.3.160/27"
     security_group = "ApplicationGateway-nsg" //added code for seg inside the subnet map if doesnt work remove the code
     creatensg      = true                     //added code for seg inside the subnet map if doesnt work remove the code 
-}
+  }
   subnet1 = {
     index          = 1
     name           = "GatewaySubnet"
     address_prefix = "10.41.3.224/27"
     security_group = "GatewaySubnet-nsg"
     creatensg      = false
-  }  
+  }
 
   subnet2 = {
     index          = 2
@@ -98,14 +99,14 @@ subnets_hub2 = {
     address_prefix = "10.42.3.160/27"
     security_group = "ApplicationGateway-nsg" //added code for seg inside the subnet map if doesnt work remove the code
     creatensg      = true                     //added code for seg inside the subnet map if doesnt work remove the code 
-}
+  }
   subnet1 = {
     index          = 1
     name           = "GatewaySubnet"
     address_prefix = "10.42.3.224/27"
     security_group = "GatewaySubnet-nsg"
     creatensg      = false
-  }  
+  }
 
   subnet2 = {
     index          = 2
@@ -127,30 +128,30 @@ subnets_shared = {
     creatensg      = true
   }
 
-#   subnet1 = {
-#     index          = 1
-#     name           = "sharedSubnet"
-#     address_prefix = "10.43.0.0/25"
-#     security_group = "sharedSubnet-nsg"
-#     creatensg      = true
-#   }  
+  #   subnet1 = {
+  #     index          = 1
+  #     name           = "sharedSubnet"
+  #     address_prefix = "10.43.0.0/25"
+  #     security_group = "sharedSubnet-nsg"
+  #     creatensg      = true
+  #   }  
 }
 
-app_subnets   = {
+app_subnets = {
   subnet0 = {
     index          = 0
     name           = "AppSubnet"
     address_prefix = "10.46.0.0/25"
     security_group = "AppSubnet-nsg" //added code for seg inside the subnet map if doesnt work remove the code
-    creatensg      = false                     //added code for seg inside the subnet map if doesnt work remove the code 
-}
+    creatensg      = false           //added code for seg inside the subnet map if doesnt work remove the code 
+  }
   subnet1 = {
     index          = 1
     name           = "LBsubnet"
     address_prefix = "10.46.0.128/25"
     security_group = "LBsubnet-nsg"
     creatensg      = false
-  }  
+  }
 
   subnet2 = {
     index          = 2

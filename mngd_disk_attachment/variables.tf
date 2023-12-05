@@ -17,3 +17,4 @@ variable "caching" {
   type        = string
   description = "Specifies the caching requirements for this Managed Data Disk. Possible values include: None, ReadOnly and ReadWrite"
 }
+

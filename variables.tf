@@ -51,6 +51,11 @@ variable "regions" {
   }
 }
 
+variable "tags" {
+  type        = map(any)
+  description = "A map of tags to assign to the resource. Allowed values are 'key = value'pairs"  
+}
+
 variable "CustomerID" {
   description = "ID for the new customer"
   type        = string
@@ -211,14 +216,14 @@ variable "app_subnets" {
 variable "frontend_name" {
   type        = string
   description = "Name of the public IP for frontend LB"
-  
+
 }
 
 variable "allocation_method" {
   type        = string
   description = "(Required) Defines the allocation method for this IP address. Possible values are Static or Dynamic"
   default     = "Dynamic"
-  
+
 }
 
 ######################Azure Vnet variables##########################
@@ -329,15 +334,15 @@ variable "cache_mode" {
 
 ################################################Recovery Service Vault variables################################################
 variable "vault_name" {
-  type = string
+  type        = string
   description = "Name used for the recovery services vault"
-  
+
 }
 
 variable "rsv_sku" {
-  type = string
+  type        = string
   description = "(Required) Sets the vault's SKU. Possible values include: Standard, RS0."
-  default = "Standard"
+  default     = "Standard"
 }
 
 ################################################Recovery Service Vault variables################################################
@@ -346,34 +351,39 @@ variable "rsv_sku" {
 variable "aut_acc_name" {
   type        = string
   description = "Name of the automation account"
-  
+
 }
 
 variable "aut_acc_sku" {
   type        = string
   description = " (Required) The SKU of the account. Possible values are Basic and Free"
-  default     = "free"  
+  default     = "free"
 }
 ##################################################Automation Account variables##################################################
 
 #####################################################Load Balancer variables####################################################
 variable "load_balancer_name" {
-  type = string
+  type        = string
   description = "Name of the Load Balancer"
 }
 
 variable "load_balancer_sku" {
-  type = string
+  type        = string
   description = "SKU of the Load Balancer, allowed values are Standard and Gateway"
 }
 
 variable "private_ip_allocation" {
-  type  = string
-  description = "Allocation type for the private IP address"  
+  type        = string
+  description = "Allocation type for the private IP address"
 }
 
-variable "private_ip" {  
-  description = "The private IP for the load balancer"  
+variable "private_ip" {
+  description = "The private IP for the load balancer"
+}
+
+variable "pip_sku" {
+  type        = string
+  description = "The SKU of the Public IP. Accepted values are Basic and Standard,  Changing this forces a new resource to be created."
 }
 
 #####################################################Load Balancer variables####################################################

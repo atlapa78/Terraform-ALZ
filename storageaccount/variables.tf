@@ -30,3 +30,8 @@ variable "account_kind" {
   description = " Kind of account. Valid options are: BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2"
   default     = "StorageV2"
 }
+
+variable "tags_rsrc" {
+  type        = map(any)
+  description = "A map of tags to assign to the resource. Allowed values are 'key = value'pairs"
+}

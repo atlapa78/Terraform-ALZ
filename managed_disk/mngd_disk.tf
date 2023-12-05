@@ -5,4 +5,5 @@ resource "azurerm_managed_disk" "disk" {
   storage_account_type = var.disk_type
   create_option        = "Empty"
   disk_size_gb         = var.disk_size
+  tags                 = var.tags_rsrc
 }

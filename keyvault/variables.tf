@@ -54,3 +54,7 @@ variable "soft_delete_retention_days" {
   description = "Number of day for the retention"
 }
 
+variable "tags_rsrc" {
+  type        = map(any)
+  description = "A map of tags to assign to the resource. Allowed values are 'key = value'pairs"
+}
