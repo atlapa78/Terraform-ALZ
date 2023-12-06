@@ -293,6 +293,7 @@ module "hub_vnet_rgn1" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
+  depends_on [module.network_RG]
 
 }
 
@@ -314,6 +315,7 @@ module "hub_vnet_rgn2" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
+  depends_on [module.network_RG]
   environment = var.environment
 }
 
@@ -398,6 +400,7 @@ module "shared_vnet" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
+  depends_on[module.sharednetwork_RG]
 }
 
 module "windows_vm" {
@@ -469,6 +472,7 @@ module "disk_attachment" {
   lun_id  = tonumber(lookup(local.luns, each.key))
   caching = var.cache_mode
   depends_on = [
+    module.aads_RG,
     module.managed_disk,
     module.windows_vm
   ]
@@ -546,6 +550,7 @@ module "app_vnet" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
+  depends_on[module.app_network_rg]
 }
 
 module "lb_frontend" {
@@ -564,6 +569,7 @@ module "lb_frontend" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
+  depends_on[module.app_network_rg]
 }
 
 module "load_balancer" {
@@ -586,6 +592,7 @@ module "load_balancer" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
+  depends_on [module.app_network_rg]
 }
 
 #####################################################PRD SUBSCRIPTION###############################################################################
