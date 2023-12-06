@@ -400,7 +400,7 @@ module "shared_vnet" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on[module.sharednetwork_RG]
+  depends_on = [module.sharednetwork_RG]
 }
 
 module "windows_vm" {
@@ -550,7 +550,7 @@ module "app_vnet" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on[module.app_network_rg]
+  depends_on = [module.app_network_rg]
 }
 
 module "lb_frontend" {
@@ -569,7 +569,7 @@ module "lb_frontend" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on[module.app_network_rg]
+  depends_on = [module.app_network_rg]
 }
 
 module "load_balancer" {
