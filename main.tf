@@ -12,6 +12,14 @@ terraform {
     }
 
   }
+  
+  backend "azurerm" {
+
+    resource_group_name  = "Terraform-lab-rg"
+    storage_account_name = "alcavdes1tsa1"
+    container_name       = "terraform"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
