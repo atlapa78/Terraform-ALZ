@@ -30,7 +30,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              commandOptions: '-force-copy '
+              commandOptions: '-reconfigure'
               backendServiceArm: 'terraform SP - AZ -Students'
               backendAzureRmResourceGroupName: '$(bkstrgrg)'
               backendAzureRmStorageAccountName: '$(bkstrgacc)'
