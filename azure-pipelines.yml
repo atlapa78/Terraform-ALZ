@@ -13,7 +13,7 @@ variables:
   bkstrgrg: 'Terraform-lab-rg'
   bkstrgacc: 'alcavdes1tsa1'
   bkcontainer: 'terraform'
-  bkstrgkey: 'terraformalz.tfstate'
+  bkstrgkey: 'terraform.tfstate'
 
 stages:
   - stage: tfvalidate
