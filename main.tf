@@ -293,7 +293,7 @@ module "hub_vnet_rgn1" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on [module.network_RG]
+  depends_on = [module.network_RG]
 
 }
 
@@ -315,7 +315,7 @@ module "hub_vnet_rgn2" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on [module.network_RG]
+  depends_on = [module.network_RG]
   environment = var.environment
 }
 
@@ -592,7 +592,7 @@ module "load_balancer" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on [module.app_network_rg]
+  depends_on = [module.app_network_rg]
 }
 
 #####################################################PRD SUBSCRIPTION###############################################################################
