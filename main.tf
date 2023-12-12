@@ -1,30 +1,34 @@
-terraform {
-  required_version = ">= 1.0"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">=2.54.0"
-    }
+# terraform {
+#   required_version = ">= 1.0"
+#   required_providers {
+#     azurerm = {
+#       source  = "hashicorp/azurerm"
+#       version = ">=2.54.0"
+#     }
 
-    random = {
-      source  = "hashicorp/random"
-      version = "3.1.0"
-    }
+#     random = {
+#       source  = "hashicorp/random"
+#       version = "3.1.0"
+#     }
 
-  }
+#   }
   
-  backend "azurerm" {
+#   backend "azurerm" {
 
-    resource_group_name  = "Terraform-lab-rg"
-    storage_account_name = "alcavdes1tsa1"
-    container_name       = "terraform"
-    key                  = "terraform.tfstate"
-  }
-}
+#     resource_group_name  = "Terraform-lab-rg"
+#     storage_account_name = "alcavdes1tsa1"
+#     container_name       = "terraform"
+#     key                  = "terraform.tfstate"
+#   }
+# }
 
-provider "azurerm" {
-   features {}
-}
+# provider "azurerm" {
+#    features {}
+# }
+
+
+#######uncomment when run in Azure Devops and renane backend.tf and providers.tf
+
 
 data "azurerm_client_config" "current" {}
 
@@ -318,6 +322,52 @@ module "hub_vnet_rgn2" {
   depends_on = [module.network_RG]
   environment = var.environment
 }
+
+
+module "vpn_pip" {
+  source            = "./az_public_IP"
+  location          = var.location
+  pip_name          = lower("${var.CustomerID}-${var.regions[var.location]}-vpn-pip")
+  rgname            = module.app_network_rg.rg_name
+  allocation_method = var.vpn_pip_allocation_method
+  pip_sku           = "Basic"
+  tags_rsrc = {
+    Environment             = "PRD"
+    Location                = var.location
+    "Bussiness Criticality" = "High"
+    "Data Classification"   = "General"
+    "Business unit"         = "N/A"
+    "Operations team"       = "Cloud Operations"
+    "Cost center"           = "Exactlyit"
+  }
+  depends_on = [module.app_network_rg]
+}
+
+
+module "vpn_s2s" {
+  source                        = "./az_vpn"
+  count                         = var.create_vpn ? 1 : 0
+  vpn_name                      = lower("${var.CustomerID}-${var.regions[var.location]}-vpn-vng")
+  location                      = var.location
+  rgname                        = module.network_RG.rg_name
+  vng_type                      = var.vng_type
+  vpn_type                      = var.vpn_type
+  vpn_sku                       = var.vpn_sku
+  public_ip_address_id          = module.vpn_pip.pip_id
+  private_ip_address_allocation = var.private_ip_address_allocation
+  subnet_id                     = element(module.hub_vnet_rgn1.gatewayid, 0)
+  tags_rsrc = {
+    Environment             = "PRD"
+    Location                = var.location
+    "Bussiness Criticality" = "High"
+    "Data Classification"   = "General"
+    "Business unit"         = "N/A"
+    "Operations team"       = "Cloud Operations"
+    "Cost center"           = "Exactlyit"
+  }
+  depends_on = [ module.vpn_pip, module.app_network_rg ]
+}
+
 
 ############################################CONNECTIVITY SUBSCRIPTION###############################################################################
 ####################################################################################################################################################

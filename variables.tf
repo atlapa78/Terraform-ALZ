@@ -387,3 +387,41 @@ variable "pip_sku" {
 }
 
 #####################################################Load Balancer variables####################################################
+
+
+######################################################VPN variables##############################################################
+variable "vng_type" {
+  type        = string
+  description = "The type of the Virtual Network Gateway. Valid options are Vpn or ExpressRoute."
+}
+
+
+variable "vpn_type" {
+  type        = string
+  description = "The routing type of the Virtual Network Gateway. Valid options are RouteBased or PolicyBased. Defaults to RouteBased"
+}
+
+variable "vpn_sku" {
+  type        = string
+  description = "Configuration of the size and capacity of the virtual network gateway. Valid options are Basic, Standard, HighPerformance, UltraPerformance, ErGw1AZ, ErGw2AZ, ErGw3AZ, VpnGw1, VpnGw2, VpnGw3, VpnGw4,VpnGw5, VpnGw1AZ, VpnGw2AZ, VpnGw3AZ,VpnGw4AZ and VpnGw5AZ and depend on the type, vpn_type and generation arguments. A PolicyBased gateway only supports the Basic SKU. Further, the UltraPerformance SKU is only supported by an ExpressRoute gateway."
+}
+
+variable "private_ip_address_allocation" {
+  type        = string
+  description = "Defines how the private IP address of the gateways virtual interface is assigned. Valid options are Static or Dynamic"  
+}
+
+
+variable "vpn_pip_allocation_method" {
+  type        = string
+  description = "Valid options are Static or Dynamic"  
+}
+
+variable "create_vpn" {
+  type        = bool
+  description = "Used for to determie i virtual netork gateway is going to be created"
+  default     = false
+}
+
+
+######################################################VPN variables##############################################################
