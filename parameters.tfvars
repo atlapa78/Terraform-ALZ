@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-CustomerID                    = "cl6"
+CustomerID                    = "cl7"
 location                      = "eastus"
 location2                     = "westus"
 environment                   = "alz"
