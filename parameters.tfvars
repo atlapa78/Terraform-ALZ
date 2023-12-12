@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CustomerID                    = "cl6"
 location                      = "eastus"
 location2                     = "westus"
@@ -33,6 +34,38 @@ vng_type                      = "Vpn"
 vpn_type                      = "RouteBased"
 vpn_sku                       = "VpnGw1"
 create_vpn                    = true
+=======
+CustomerID                 = "cl3"
+location                   = "eastus"
+location2                  = "westus"
+environment                = "alz"
+laws_sku                   = "PerGB2018"
+retention_days             = 90
+keyvault_sku               = "standard"
+soft_delete_retention_days = 7
+account_tier               = "Standard"
+account_replication_type   = "LRS"
+createalzkv                = true
+createauditsta             = true
+creatediagsta              = true
+createhub1                 = true
+createhub2                 = false
+create_vms                 = true
+create_data_disks          = true
+vm_number                  = 2
+rsv_sku                    = "Standard"
+vault_name                 = "backup"
+aut_acc_name               = "automation"
+aut_acc_sku                = "Basic"
+frontend_name              = "app-LB"
+allocation_method          = "Static"
+load_balancer_name         = "app_lb"
+load_balancer_sku          = "Standard"
+private_ip_allocation      = "static"
+private_ip                 = "10.46.0.133"
+pip_sku                    = "Standard"
+
+>>>>>>> 899589a694b2c314958aa2ef6724ab2fc5464149
 
 data_disks = {
   disk0 = {

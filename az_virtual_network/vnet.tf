@@ -20,8 +20,8 @@ resource "azurerm_virtual_network" "az_vnet" {
     content {
       name                      = subnet.value.name
       address_prefix            = subnet.value.address_prefix
-      
-      //security_group            = subnet.value.name != "FirewallSubnet" && subnet.value.name != "GatewaySubnet" && length(values(azurerm_network_security_group.vnet-nsg)) != 0 ? element([for i in values(azurerm_network_security_group.vnet-nsg) : i.id if trimsuffix(i.name, "-nsg") != "" && trimsuffix(i.name, "-nsg") == subnet.value.name], 0) : null
+
+      security_group            = subnet.value.name != "FirewallSubnet" && subnet.value.name != "GatewaySubnet" && length(values(azurerm_network_security_group.vnet-nsg)) != 0 ? element([for i in values(azurerm_network_security_group.vnet-nsg) : i.id if trimsuffix(i.name, "-nsg") != "" && trimsuffix(i.name, "-nsg") == subnet.value.name], 0) : null
       //security_group = [for i in values(azurerm_network_security_group.alznsg) : i.id if trimsuffix(i.name,"-nsg") != "" &&  trimsuffix(i.name,"-nsg") == subnet.value.name] !=0 ? element([for i in values(azurerm_network_security_group.alznsg) : i.id if trimsuffix(i.name,"-nsg") != "" &&  trimsuffix(i.name,"-nsg") == subnet.value.name],0) : null                       
     }
   }
