@@ -1,4 +1,5 @@
-CustomerID                    = "cl8"
+<<<<<<< HEAD
+CustomerID                    = "cl6"
 location                      = "eastus"
 location2                     = "westus"
 environment                   = "alz"
