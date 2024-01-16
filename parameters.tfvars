@@ -1,4 +1,5 @@
-CustomerID                    = "cl8"
+CustomerName                  = "Sbx_Customer01"
+CustomerID                    = "sb1"
 location                      = "eastus"
 location2                     = "westus"
 environment                   = "alz"
@@ -32,7 +33,20 @@ private_ip_address_allocation = "Dynamic"
 vng_type                      = "Vpn"
 vpn_type                      = "RouteBased"
 vpn_sku                       = "VpnGw1"
-create_vpn                    = true
+create_vpn                    = false
+
+audit_rg                      = "audit-logs"
+monitoring_rg                 = "monitoring"
+costmgmt_rg                   = "costmgmt"
+keyvault_rg                   = "keys"
+network_rg                    = "network"
+sharednetwork_rg              = "shared-network"
+backup_rg                     = "backup"
+aads_rg                       = "aads"
+app_network_rg                = "app-network"
+app_workload_rg               = "app-workload"
+recovery_rg                   = "recovery"
+shared_sta                    = "Share"
 
 data_disks = {
   disk0 = {
@@ -78,6 +92,8 @@ subnets_hub1 = {
     address_prefix = "10.41.3.160/27"
     security_group = "ApplicationGateway-nsg" //added code for seg inside the subnet map if doesnt work remove the code
     creatensg      = true                     //added code for seg inside the subnet map if doesnt work remove the code 
+    //route_table    = ""
+    create_rt      = true
   }
   subnet1 = {
     index          = 1
@@ -85,6 +101,7 @@ subnets_hub1 = {
     address_prefix = "10.41.3.224/27"
     security_group = "GatewaySubnet-nsg"
     creatensg      = false
+    create_rt      = false
   }
 
   subnet2 = {
@@ -93,6 +110,7 @@ subnets_hub1 = {
     address_prefix = "10.41.3.0/26"
     security_group = "FirewallSubnet-nsg"
     creatensg      = false
+    create_rt      = false
   }
 
 }
@@ -103,7 +121,8 @@ subnets_hub2 = {
     name           = "ApplicationGateway"
     address_prefix = "10.42.3.160/27"
     security_group = "ApplicationGateway-nsg" //added code for seg inside the subnet map if doesnt work remove the code
-    creatensg      = true                     //added code for seg inside the subnet map if doesnt work remove the code 
+    creatensg      = true                    //added code for seg inside the subnet map if doesnt work remove the code 
+    create_rt      = true
   }
   subnet1 = {
     index          = 1
@@ -111,6 +130,7 @@ subnets_hub2 = {
     address_prefix = "10.42.3.224/27"
     security_group = "GatewaySubnet-nsg"
     creatensg      = false
+    create_rt      = false
   }
 
   subnet2 = {
@@ -119,6 +139,7 @@ subnets_hub2 = {
     address_prefix = "10.42.3.0/26"
     security_group = "FirewallSubnet-nsg"
     creatensg      = false
+    create_rt      = false
   }
 
 }
@@ -131,6 +152,7 @@ subnets_shared = {
     address_prefix = "10.45.0.0/25"
     security_group = "sharedServicesSubnet-nsg"
     creatensg      = true
+    create_rt      = true
   }
 
   #   subnet1 = {
@@ -149,6 +171,7 @@ app_subnets = {
     address_prefix = "10.46.0.0/25"
     security_group = "AppSubnet-nsg" //added code for seg inside the subnet map if doesnt work remove the code
     creatensg      = false           //added code for seg inside the subnet map if doesnt work remove the code 
+    create_rt      = true
   }
   subnet1 = {
     index          = 1
@@ -156,6 +179,7 @@ app_subnets = {
     address_prefix = "10.46.0.128/25"
     security_group = "LBsubnet-nsg"
     creatensg      = false
+    create_rt      = true
   }
 
   subnet2 = {
@@ -164,6 +188,7 @@ app_subnets = {
     address_prefix = "10.46.3.0/26"
     security_group = "DBSubnet-nsg"
     creatensg      = false
+    create_rt      = true
   }
 
 }

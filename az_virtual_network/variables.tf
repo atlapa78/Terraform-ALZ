@@ -3,8 +3,6 @@ variable "vnetname" {
   type        = string
 }
 
-
-
 variable "environment" {
   description = "environment where the resources are going to be created"
   type        = string
@@ -14,8 +12,6 @@ variable "rgname" {
   description = "environment where the resources are going to be created"
   type        = string
 }
-
-
 
 variable "location" {
   //description = "Location for the resources"
@@ -101,56 +97,5 @@ variable "subnets" {
 
 }
 
-# variable "regions" {
-#   description = "Map of Azure regions to id regions p/e es1"
-#   type        = map(any)
-#   default = {
-#     eastasia           = "ea"
-#     southeastasia      = "sea"
-#     australiacentral   = "auc"
-#     australiacentral2  = "auc2"
-#     australiaeast      = "aue"
-#     australiasoutheast = "ause"
-#     chinaeast          = "che"
-#     chinaeast2         = "che2"
-#     chinanorth         = "chn"
-#     chinanorth2        = "chn2"
-#     centralindia       = "inc"
-#     southindia         = "ins"
-#     westindia          = "inw"
-#     japaneast          = "jae"
-#     japanwest          = "jaw"
-#     koreacentral       = "koc"
-#     koreasouth         = "kos"
-#     southafricanorth   = "san"
-#     southafricawest    = "saw"
-#     uaecentral         = "uac"
-#     uaenorth           = "uan"
-#     qatarcentral       = "qac"
-#     francecentral      = "fc"
-#     francesouth        = "frs"
-#     germanynorth       = "grn"
-#     germanywestcentral = "gwc"
-#     norwayeast         = "noe"
-#     norwaywest         = "now"
-#     switzerlandnorth   = "swn"
-#     switzerlandwest    = "sww"
-#     uksouth            = "uks"
-#     ukwest             = "ukw"
-#     northeurope        = "ne"
-#     westeurope         = "we"
-#     brazilsouth        = "brs"
-#     canadacentral      = "cac"
-#     canadaeast         = "cae"
-#     centralus          = "cu"
-#     eastus             = "es1"
-#     eastus2            = "es2"
-#     northcentralus     = "ncu"
-#     southcentralus     = "scu"
-#     westcentralus      = "wcu"
-#     westus             = "wu"
-#     westus2            = "wu2"
-#   }
-# }
 
 

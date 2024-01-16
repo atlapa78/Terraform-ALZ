@@ -56,6 +56,11 @@ variable "regions" {
 #   description = "A map of tags to assign to the resource. Allowed values are 'key = value'pairs"  
 # }
 
+variable "CustomerName" {
+  description = "Name of the new customer"
+  type        = string
+}
+
 variable "CustomerID" {
   description = "ID for the new customer"
   type        = string
@@ -71,6 +76,65 @@ variable "location2" {
   type        = string
   description = "Paired region of location"
 }
+
+variable "audit_rg" {
+  type        = string
+  description = "Name for the audit RG"
+}
+
+variable "monitoring_rg" {
+  type        = string
+  description = "Name for the monitoring RG"
+}
+
+variable "costmgmt_rg" {
+  type        = string
+  description = "Name for the cost management RG"
+}
+
+variable "keyvault_rg" {
+  type        = string
+  description = "Name for the keyvault RG"
+}
+
+variable "network_rg" {
+  type        = string
+  description = "Name for the network RG"
+}
+
+variable "sharednetwork_rg" {
+  type        = string
+  description = "Name for the shared network RG"
+}
+
+variable "backup_rg" {
+  type        = string
+  description = "Name for the backup RG"
+}
+
+variable "aads_rg" {
+  type        = string
+  description = "Name for the aads RG"
+}
+
+
+variable "app_network_rg" {
+  type        = string
+  description = "Name for the app network RG"
+}
+
+variable "app_workload_rg" {
+  type        = string
+  description = "Name for the application workload RG"
+}
+
+variable "recovery_rg" {
+  type        = string
+  description = "Name for the recovery RG"
+}
+
+
+
 ######################General purpose variables##########################
 
 ######################Log Analitycs Workspace variables##########################
@@ -152,6 +216,11 @@ variable "account_replication_type" {
   type        = string
   description = "Replication to use for storage account, valid values: LRS, GRS, RAGRS, ZRS, GZRS, RAGZRS"
   default     = "LRS"
+}
+
+variable "shared_sta" {
+  type        = string
+  description = "Storage account used for shared"
 }
 
 ######################Storage Account variables##########################

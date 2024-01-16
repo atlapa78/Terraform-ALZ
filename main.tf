@@ -27,7 +27,7 @@
 # }
 
 
-#######uncomment when run in Azure Devops and renane backend.tf and providers.tf
+#######uncomment when run in Azure Devops and rename backend.tf and providers.tf
 
 
 data "azurerm_client_config" "current" {}
@@ -53,14 +53,60 @@ locals {
 
 }
 
+
+module "parent_mgmt" {
+  source          = "./az_mgmt_group"
+  mgmt_display    = "${var.CustomerName}100"
+}
+
+module "mgmt_mgmt" {
+  source          = "./az_mgmt_group"
+  mgmt_display    = "Management"
+  parent_mgmt_group_id = module.parent_mgmt.mgmt_id
+  depends_on = [ 
+    module.parent_mgmt
+  ]
+}
+
+module "audit_mgmt" {
+  source          = "./az_mgmt_group"
+  mgmt_display    = "Audit"
+  parent_mgmt_group_id = module.parent_mgmt.mgmt_id  
+  depends_on = [ 
+    module.parent_mgmt
+  ]  
+}
+
+module "infra_mgmt" {
+  source          = "./az_mgmt_group"
+  mgmt_display    = "Infrastructure"
+  parent_mgmt_group_id = module.parent_mgmt.mgmt_id
+  depends_on = [ 
+    module.parent_mgmt
+  ]
+}
+
+module "work_mgmt" {
+  source          = "./az_mgmt_group"
+  mgmt_display    = "Workloads01"
+  # parent_mgmt_group_id = module.parent_mgmt.mgmt_id  
+  # depends_on = [ 
+  #   module.parent_mgmt
+  # ]
+}
+
+# resource "azurerm_management_group_subscription_association" "infra_association" {
+#   management_group_id = module.infra_mgmt.mgmt_id
+#   subscription_id     = data.azurerm_client_config.current.subscription_id
+# }
+
 ####################################################################################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
 ############################################AUDIT SUBSCRIPTION######################################################################################
 module "auditlogs_RG" {
   source = "./az_resource_group"
-  //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
-  rgname   = "auditlogs-glb-rg"
+  rgname   = lower("${var.audit_rg}-glb-rg")
   location = var.location
   tags_rg = {
     Environment = "Audit"
@@ -128,7 +174,7 @@ module "audit_SA" {
 module "monitoring_RG" {
   source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
-  rgname   = "monitoring-glb-rg"
+  rgname   = lower("${var.monitoring_rg}-glb-rg")
   location = var.location
   tags_rg = {
     Environment = "Management"
@@ -136,10 +182,16 @@ module "monitoring_RG" {
   }
 }
 
+module "action_group_test" {
+  source      = "./az_monitor_action_group"
+  action_name = "test_action_group"
+  rgname      = module.monitoring_RG.rg_name
+}
+
 module "costmgmt_RG" {
   source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-auditlogs-alz-${var.regions[var.location]}-rg")
-  rgname   = "costmgmt-glb-rg"
+  rgname   = lower("${var.costmgmt_rg}-glb-rg")
   location = var.location
   tags_rg = {
     Environment = "Management"
@@ -150,7 +202,7 @@ module "costmgmt_RG" {
 module "keyvault_RG" {
   source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-keyvault-alz-${var.regions[var.location]}-rg")
-  rgname   = "keys-glb-rg"
+  rgname   = lower("${var.keyvault_rg}-glb-rg")
   location = var.location
   tags_rg = {
     Environment = "Management"
@@ -162,7 +214,7 @@ module "keyvault_RG" {
 module "operationallogs_WS" {
   source = "./az_log_analitycs"
   //rgname         = module.operationallogsrg.rg_name
-  rgname         = module.keyvault_RG.rg_name
+  rgname         = module.monitoring_RG.rg_name
   location       = var.location
   laws_name      = lower("${var.CustomerID}-operationallogs-alz-${var.regions[var.location]}-workspace")
   laws_sku       = var.laws_sku
@@ -176,7 +228,7 @@ module "operationallogs_WS" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on = [module.keyvault_RG]
+  depends_on = [module.monitoring_RG]
 }
 
 module "keyvault" {
@@ -253,7 +305,7 @@ module "mgmt_aut_acc" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on = [module.costmgmt_RG]
+  depends_on = [module.monitoring_RG]
 }
 
 ############################################MANAGEMENT SUBSCRIPTION#################################################################################
@@ -270,7 +322,7 @@ module "mgmt_aut_acc" {
 module "network_RG" {
   source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-network-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("network-${var.regions[var.location]}-rg")
+  rgname   = lower("${var.network_rg}-${var.regions[var.location]}-rg")
   location = var.location
   tags_rg = {
     Environment = "Connectivity"
@@ -282,7 +334,7 @@ module "hub_vnet_rgn1" {
   source = "./az_virtual_network"
   //count         = var.createhub1 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
-  vnetname      = lower("hubvnet-${var.regions[var.location]}1")
+  vnetname      = lower("hubvnet-${var.regions[var.location]}-1")
   rgname        = module.network_RG.rg_name
   location      = var.location
   address_space = var.address_space_hub1
@@ -328,7 +380,7 @@ module "vpn_pip" {
   source            = "./az_public_IP"
   location          = var.location
   pip_name          = lower("${var.CustomerID}-${var.regions[var.location]}-vpn-pip")
-  rgname            = module.app_network_rg.rg_name
+  rgname            = module.network_RG.rg_name
   allocation_method = var.vpn_pip_allocation_method
   pip_sku           = "Basic"
   tags_rsrc = {
@@ -340,7 +392,7 @@ module "vpn_pip" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on = [module.app_network_rg]
+  depends_on = [module.network_RG]
 }
 
 
@@ -365,7 +417,7 @@ module "vpn_s2s" {
     "Operations team"       = "Cloud Operations"
     "Cost center"           = "Exactlyit"
   }
-  depends_on = [ module.vpn_pip, module.app_network_rg ]
+  depends_on = [ module.vpn_pip, module.app_network_rg, module.network_RG]
 }
 
 
@@ -382,9 +434,8 @@ module "vpn_s2s" {
 
 
 module "sharednetwork_RG" {
-  source = "./az_resource_group"
-  //rgname   = lower("${var.CustomerID}-operationallogs-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("shared-network-${var.regions[var.location]}-rg")
+  source = "./az_resource_group"  
+  rgname   = lower("${var.sharednetwork_rg}-${var.regions[var.location]}-rg")
   location = var.location
   tags_rg = {
     Environment = "Shared"
@@ -395,7 +446,7 @@ module "sharednetwork_RG" {
 module "backup_RG" {
   source = "./az_resource_group"
   //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("backup-${var.regions[var.location]}-rg")
+  rgname   = lower("${var.backup_rg}-${var.regions[var.location]}-rg")
   location = var.location
   tags_rg = {
     Environment = "Shared"
@@ -405,8 +456,7 @@ module "backup_RG" {
 
 module "aads_RG" {
   source = "./az_resource_group"
-  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("aads-${var.regions[var.location]}-rg")
+  rgname   = lower("${var.aads_rg}-${var.regions[var.location]}-rg")
   location = var.location
   tags_rg = {
     Environment = "Shared"
@@ -518,7 +568,7 @@ module "disk_attachment" {
   for_each = length(module.managed_disk) < 1 ? {} : { for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id }
   //for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
   disk_id = each.value
-  vm_id   = lookup({ for vm in module.windows_vm : vm.vm_name => vm.vm_id }, substr(each.key, 0, 11))
+  vm_id   = lookup({ for vm in module.windows_vm : vm.vm_name => vm.vm_id }, substr(each.key, 0, 11))  //replace lenght vm.vm_name with eleven
   lun_id  = tonumber(lookup(local.luns, each.key))
   caching = var.cache_mode
   depends_on = [
@@ -531,7 +581,7 @@ module "disk_attachment" {
 module "shared_SA" {
   source                   = "./az_storage_account"
   count                    = var.creatediagsta ? 1 : 0
-  storageaccountname       = lower("shared${var.regions[var.location]}sta")
+  storageaccountname       = lower("${var.shared_sta}${var.regions[var.location]}sta")
   rgname                   = module.aads_RG.rg_name
   location                 = var.location
   account_tier             = var.account_tier
@@ -561,8 +611,7 @@ module "shared_SA" {
 ####################################################################################################################################################
 module "app_network_rg" {
   source = "./az_resource_group"
-  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("app-network${var.regions[var.location]}-rg")
+  rgname   = lower("${var.app_network_rg}-${var.regions[var.location]}-rg")
   location = var.location
   tags_rg = {
     Environment = "PRD"
@@ -572,8 +621,7 @@ module "app_network_rg" {
 
 module "app_workload_rg" {
   source = "./az_resource_group"
-  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("app-workload${var.regions[var.location]}-rg")
+  rgname   = lower("${var.app_workload_rg}-${var.regions[var.location]}-rg")
   location = var.location
   tags_rg = {
     Environment = "PRD"
@@ -658,8 +706,7 @@ module "load_balancer" {
 ####################################################################################################################################################
 module "recovery_rg" {
   source = "./az_resource_group"
-  //rgname   = lower("${var.CustomerID}-infrastructure-alz-${var.regions[var.location]}-rg")
-  rgname   = lower("recovery${var.regions[var.location2]}-rg")
+  rgname   = lower("${var.recovery_rg}-${var.regions[var.location2]}-rg")
   location = var.location2
   tags_rg = {
     Environment = "DR"
@@ -788,7 +835,32 @@ module "dr_rsv" {
 #   value = module.az_key_vault
 # }
 
-output "subnetlbid1" {
-  value = element(module.app_vnet.subnetlbid, 0)
-}
+# output "subnetlbid1" {
+#   value = element(module.app_vnet.subnetlbid, 0)
+# }
 
+# output "subnetnamesfor" {
+#   value = module.app_vnet.subnetnames
+# }
+
+# output "hub_vnet_rgn1" {
+#   value = module.hub_vnet_rgn1.subnetnames
+# }
+
+
+# output "rtapp_vnet" {
+#   value = module.app_vnet.rtnames
+# }
+
+# output "rthub_vnet_rgn1" {
+#   value = module.hub_vnet_rgn1.rtnames
+# }
+
+# output "hub_vnet_rgn1_assoc" {
+#   value = module.hub_vnet_rgn1.rtassociations
+# }
+
+# output "app_vnet_assoc" {
+#   //value = zipmap(module.app_vnet.rtassociations[0],module.app_vnet.rtassociations[1])
+#   value = module.app_vnet.rtassociations
+# }
