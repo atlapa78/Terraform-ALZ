@@ -48,6 +48,7 @@ variable "regions" {
     westcentralus      = "wcu"
     westus             = "wu"
     westus2            = "wu2"
+    westus3            = "wu3"
   }
 }
 
@@ -87,6 +88,11 @@ variable "monitoring_rg" {
   description = "Name for the monitoring RG"
 }
 
+variable "action_group" {
+  type        = string
+  description = "Name for the action group"
+}
+
 variable "costmgmt_rg" {
   type        = string
   description = "Name for the cost management RG"
@@ -97,7 +103,7 @@ variable "keyvault_rg" {
   description = "Name for the keyvault RG"
 }
 
-variable "network_rg" {
+variable "hub_network_rg" {
   type        = string
   description = "Name for the network RG"
 }
@@ -121,6 +127,11 @@ variable "aads_rg" {
 variable "app_network_rg" {
   type        = string
   description = "Name for the app network RG"
+}
+
+variable "workload_vnetname" {
+  type        = string
+  description = "Name for the workload network"
 }
 
 variable "app_workload_rg" {
@@ -223,10 +234,67 @@ variable "shared_sta" {
   description = "Storage account used for shared"
 }
 
+
+variable "cost_mgmt_sta" {
+  type        = string
+  description = "Storage account used for cost management"
+}
+
+
+variable "recovery_sta" {
+  type        = string
+  description = "Storage account name used for recovery"
+}
+
+variable "recovery_aut_acc" {
+  type        = string
+  description = "Automation account name used for recovery"
+}
+
+variable "recovery_rsv" {
+  type        = string
+  description = "Recovery Service Vault name used for recovery"
+}
+
+variable "platform_keyvault" {
+  type        = string
+  description = "Name for the keyvault of platform"
+}
+
 ######################Storage Account variables##########################
 
 
 ######################Azure Vnet variables##########################
+variable "hubvnet" {
+  type        = string 
+  description = "Name of the hub virtual network"
+}
+
+variable "pip_vng" {
+  type        = string
+  description = "Name of the PIP for the VPN VNG"
+}
+
+variable "pip_fw" {
+  type        = string
+  description = "Name of the PIP for the Azure Firewall"
+}
+
+variable "pip_nat_gw" {
+  type        = string
+  description = "Name of the PIP for the Nat GW"
+}
+
+variable "pip_sku" {
+    type        = string
+  description = "SKU for the Public IP for VPN VNG"
+}
+
+variable "vpn_name" {
+    type        = string
+  description = "Name for the VPN VNG"
+}
+
 variable "createhub1" {
   type        = bool
   description = "used for vnet hub1 creation"
