@@ -51,6 +51,55 @@ locals {
   ]
   luns = { for k in local.lun_map : k.datadisk_name => k.lun }
 
+#######################################################Local variables for App Vnet####################################################################
+  app_subnet_ids          = tolist([for sub in module.app_vnet.subnets : sub.id ])
+  app_rt_ids              = tolist([for rt in module.app_vnet_rt.route_tables : rt.id])   ##### cambiar por modulo de route tables para obtner los IDs
+  app_subnet_names        = tolist([for i in values(var.app_subnets) : i.name if i.create_rt])
+  app_rt_associations     = tomap({
+    subnet_id = flatten([for subname in local.app_subnet_names : [ for subid in local.app_subnet_ids : subid if strcontains(subid,subname)]])
+    rt_id     = flatten([for subname in local.app_subnet_names : [ for rtid in local.app_rt_ids : rtid if strcontains(rtid,subname)]])
+  })
+  app_rt_sub_associations = zipmap(values(local.app_rt_associations)[1], values(local.app_rt_associations)[0])
+
+#######################################################Local variables for App Vnet####################################################################
+
+
+#######################################################Local variables for hub1 Vnet####################################################################
+  hub1_subnet_ids          = tolist([for sub in module.hub_vnet_rgn1.subnets : sub.id ])
+  hub1_rt_ids              = tolist([for rt in module.hub_vnet_rgn1_rt.route_tables  : rt.id])
+  hub1_subnet_names        = tolist([for i in values(var.subnets_hub1) : i.name if i.create_rt])
+  hub1_rt_associations     = tomap({
+    subnet_id = flatten([for subname in local.hub1_subnet_names : [ for subid in local.hub1_subnet_ids : subid if strcontains(subid,subname)]])
+    rt_id     = flatten([for subname in local.hub1_subnet_names : [ for rtid in local.hub1_rt_ids : rtid if strcontains(rtid,subname)]])
+  })
+  hub1_rt_sub_associations = zipmap(values(local.app_rt_associations)[1], values(local.app_rt_associations)[0])
+
+#######################################################Local variables for hub1 Vnet####################################################################
+
+#######################################################Local variables for hub2 Vnet####################################################################
+  hub2_subnet_ids          = tolist([for sub in module.hub_vnet_rgn2.subnets : sub.id ])
+  hub2_rt_ids              = tolist([for rt in module.hub_vnet_rgn2_rt.route_tables : rt.id])
+  hub2_subnet_names        = tolist([for i in values(var.subnets_hub2) : i.name if i.create_rt])
+  hub2_rt_associations     = tomap({
+    subnet_id = flatten([for subname in local.hub2_subnet_names : [ for subid in local.hub2_subnet_ids : subid if strcontains(subid,subname)]])
+    rt_id     = flatten([for subname in local.hub2_subnet_names : [ for rtid in local.hub2_rt_ids : rtid if strcontains(rtid,subname)]])
+  })
+  hub2_rt_sub_associations = zipmap(values(local.hub2_rt_associations)[1], values(local.hub2_rt_associations)[0])
+
+#######################################################Local variables for hub2 Vnet####################################################################
+
+#######################################################Local variables for shared Vnet####################################################################
+  shared_subnet_ids          = tolist([for sub in module.shared_vnet.subnets : sub.id ])
+  shared_rt_ids              = tolist([for rt in module.shared_vnet_rt.route_tables : rt.id])
+  shared_subnet_names        = tolist([for i in values(var.subnets_shared) : i.name if i.create_rt])
+  shared_rt_associations     = tomap({
+    subnet_id = flatten([for subname in local.shared_subnet_names : [ for subid in local.shared_subnet_ids : subid if strcontains(subid,subname)]])
+    rt_id     = flatten([for subname in local.shared_subnet_names : [ for rtid in local.shared_rt_ids : rtid if strcontains(rtid,subname)]])
+  })
+  shared_rt_sub_associations = zipmap(values(local.shared_rt_associations)[1], values(local.shared_rt_associations)[0])
+
+#######################################################Local variables for shared Vnet####################################################################
+
 }
 
 
@@ -350,12 +399,27 @@ module "hub_vnet_rgn1" {
     "Cost center"           = "Exactlyit"
   }
   depends_on = [module.network_RG]
+}
 
+module "hub_vnet_rgn1_rt" {
+  source        = "./az_route_table"
+  subnets       =  var.subnets_hub1
+  rgname        = module.network_RG.rg_name
+  location      = var.location
+  address_space = var.address_space_hub1
+  depends_on    = [module.hub_vnet_rgn1]
+}
+
+module "hub_vnet_rgn1_rt_association" {
+  source          = "./az_route_association"
+  rt_associations = local.hub1_rt_sub_associations
+  depends_on = [ module.hub_vnet_rgn1,
+                 module.hub_vnet_rgn1_rt ]
 }
 
 module "hub_vnet_rgn2" {
   source = "./az_virtual_network"
-  count  = var.createhub2 ? 1 : 0
+  //count  = var.createhub2 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location2]}-vnet")
   vnetname      = lower("hubvnet-${var.regions[var.location2]}2")
   rgname        = module.network_RG.rg_name
@@ -373,6 +437,15 @@ module "hub_vnet_rgn2" {
   }
   depends_on = [module.network_RG]
   environment = var.environment
+}
+
+module "hub_vnet_rgn2_rt" {
+  source        = "./az_route_table"
+  subnets       = var.subnets_hub2
+  rgname        = module.network_RG.rg_name
+  location      = var.location2
+  address_space = var.address_space_hub2
+  depends_on    = [module.hub_vnet_rgn2]
 }
 
 
@@ -501,6 +574,15 @@ module "shared_vnet" {
     "Cost center"           = "Exactlyit"
   }
   depends_on = [module.sharednetwork_RG]
+}
+
+module "shared_vnet_rt" {
+  source        = "./az_route_table"
+  subnets       =  var.subnets_shared
+  rgname        = module.sharednetwork_RG.rg_name
+  location      = var.location
+  address_space = var.address_space_shared
+  depends_on    = [module.shared_vnet]
 }
 
 module "windows_vm" {
@@ -650,6 +732,16 @@ module "app_vnet" {
   }
   depends_on = [module.app_network_rg]
 }
+
+module "app_vnet_rt" {
+  source        = "./az_route_table"
+  subnets       =  var.app_subnets
+  rgname        = module.app_network_rg.rg_name
+  location      = var.location
+  address_space = var.address_space_shared
+  depends_on    = [module.shared_vnet]
+}
+
 
 module "lb_frontend" {
   source            = "./az_public_IP"

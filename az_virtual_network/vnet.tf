@@ -1,14 +1,12 @@
-locals {
- 
+locals { 
   subnet_ids             = tolist([for subnet in azurerm_virtual_network.az_vnet.subnet : subnet.id ]) 
-  rt_ids                 = tolist([for rt in azurerm_route_table.subnet-rt : rt.id])
+  //rt_ids                 = tolist([for rt in azurerm_route_table.subnet-rt : rt.id])
   subnets                = tolist([for i in values(var.subnets) : i.name if i.create_rt])
-  rt_associations        = tomap({
-    subnet_id = flatten([for subname in local.subnets : [ for subid in local.subnet_ids : subid if strcontains(subid,subname)]])
-    rt_id     = flatten([for subname in local.subnets : [ for rtid in local.rt_ids : rtid if strcontains(rtid,subname)]])
-  })
-
-  rt_sub_associations   = zipmap(values(local.rt_associations)[1], values(local.rt_associations)[0])
+  # rt_associations        = tomap({
+  #   subnet_id = flatten([for subname in local.subnets : [ for subid in local.subnet_ids : subid if strcontains(subid,subname)]])
+  #   rt_id     = flatten([for subname in local.subnets : [ for rtid in local.rt_ids : rtid if strcontains(rtid,subname)]])
+  # })
+  # rt_sub_associations   = zipmap(values(local.rt_associations)[1], values(local.rt_associations)[0])
 }
 
 resource "azurerm_network_security_group" "vnet-nsg" {
@@ -39,28 +37,28 @@ resource "azurerm_virtual_network" "az_vnet" {
   ]
 }
 
-resource "azurerm_route_table" "subnet-rt" {
-  location                      = var.location
-  resource_group_name           = azurerm_virtual_network.az_vnet.resource_group_name
-  for_each                      = toset([for i in values(var.subnets) : i.name if i.create_rt])
-  name                          = tostring("${each.value}-rt")  
+# resource "azurerm_route_table" "subnet-rt" {
+#   location                      = var.location
+#   resource_group_name           = azurerm_virtual_network.az_vnet.resource_group_name
+#   for_each                      = toset([for i in values(var.subnets) : i.name if i.create_rt])
+#   name                          = tostring("${each.value}-rt")  
  
-  disable_bgp_route_propagation = false
-  route {
-    name           = tostring("${each.value}-rt")
-    address_prefix = var.address_space[0]
-    next_hop_type  = "VnetLocal"
-  }
-}
+#   disable_bgp_route_propagation = false
+#   route {
+#     name           = tostring("${each.value}-rt")
+#     address_prefix = var.address_space[0]
+#     next_hop_type  = "VnetLocal"
+#   }
+# }
 
-resource "azurerm_subnet_route_table_association" "rt_association" {
-  for_each = local.rt_sub_associations
-  subnet_id = each.key
-  route_table_id = each.value
-  depends_on = [
-    azurerm_virtual_network.az_vnet
-  ]
-}
+# resource "azurerm_subnet_route_table_association" "rt_association" {
+#   for_each = local.rt_sub_associations
+#   subnet_id = each.key
+#   route_table_id = each.value
+#   depends_on = [
+#     azurerm_virtual_network.az_vnet, azurerm_route_table.subnet-rt
+#   ]
+# }
 
 # output "subnetids" {
 #   value = index(azurerm_virtual_network.az_vnet.subnet[*].name, "GatewaySubnet")
@@ -74,21 +72,21 @@ output "subnet_ids" {
   value = local.subnet_ids
 }
 
-output "rt_ids" {
-  value = local.rt_ids
-}
+# output "rt_ids" {
+#   value = local.rt_ids
+# }
 
-output "subnetnames" {
-  value    = flatten([for subname in local.subnets : [ for subid in local.subnet_ids : subid if strcontains(subid,subname)]])
-}
+# output "subnetnames" {
+#   value    = flatten([for subname in local.subnets : [ for subid in local.subnet_ids : subid if strcontains(subid,subname)]])
+# }
 
-output "rtnames" {
-  value    = flatten([for subname in local.subnets : [ for rtid in local.rt_ids : rtid if strcontains(rtid,subname)]])
-}
+# output "rtnames" {
+#   value    = flatten([for subname in local.subnets : [ for rtid in local.rt_ids : rtid if strcontains(rtid,subname)]])
+# }
 
-output "rtassociations"{
- value = local.rt_sub_associations
-}
+# output "rtassociations"{
+#  value = local.rt_sub_associations
+# }
 # resource "azurerm_network_security_rule" "nsgrules" {
 #     for_each                   = local.nsgrules
 #       name                        = each.key

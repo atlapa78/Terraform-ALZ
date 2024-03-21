@@ -21,3 +21,7 @@ output "gatewayid" {
 output "subnets" {
   value = azurerm_virtual_network.az_vnet.subnet
 }
+
+# output "route_tables" {
+#   value = azurerm_route_table.subnet-rt
+# }
