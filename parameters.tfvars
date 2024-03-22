@@ -92,16 +92,16 @@ keyvault_secret_name = "Terraform-vm-password"
 
 
 
-address_space_hub1   = ["10.32.92.0/22"]
-address_space_shared = ["10.32.96.0/22"]
-address_app_network  = ["10.32.100.0/22"]
+address_space_hub1   = ["10.25.92.0/22"]
+address_space_shared = ["10.25.96.0/22"]
+address_app_network  = ["10.25.100.0/22"]
 
 subnets_hub1 = {
 
   subnet0 = {
     index          = 0
     name           = "GatewaySubnet"
-    address_prefix = "10.32.95.224/27"
+    address_prefix = "10.25.95.224/27"
     security_group = "GatewaySubnet-nsg"
     creatensg      = false
     create_rt      = false
@@ -110,7 +110,7 @@ subnets_hub1 = {
   subnet1 = {
     index          = 1
     name           = "AzureFirewallSubnet"
-    address_prefix = "10.32.92.0/26"
+    address_prefix = "10.25.92.0/26"
     security_group = "FirewallSubnet-nsg"
     creatensg      = false
     create_rt      = false
@@ -122,7 +122,7 @@ subnets_shared = {
   subnet0 = {
     index          = 0
     name           = "IdentitySubnet"
-    address_prefix = "10.32.96.0/22"
+    address_prefix = "10.25.96.0/22"
     security_group = "IdentitySubnet-nsg"
     creatensg      = true
     create_rt      = true
@@ -134,7 +134,7 @@ app_subnets = {
   subnet0 = {
     index          = 0
     name           = "MgmtSubnet"
-    address_prefix = "10.32.100.0/24"
+    address_prefix = "10.25.100.0/24"
     security_group = "MgmtSubnet-nsg" //added code for seg inside the subnet map if doesnt work remove the code
     creatensg      = true           //added code for seg inside the subnet map if doesnt work remove the code 
     create_rt      = true
@@ -142,7 +142,7 @@ app_subnets = {
   subnet1 = {
     index          = 1
     name           = "VM-Data-Subnet"
-    address_prefix = "10.32.103.0/24"
+    address_prefix = "10.25.103.0/24"
     security_group = "VM-Data-Subnet-nsg"
     creatensg      = true
     create_rt      = true
