@@ -1,30 +1,27 @@
-# terraform {
-#   required_version = ">= 1.0"
-#   required_providers {
-#     azurerm = {
-#       source  = "hashicorp/azurerm"
-#       version = ">=2.54.0"
-#     }
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">=2.54.0"
+    }
+     random = {
+      source  = "hashicorp/random"
+      version = "3.1.0"
+    }
+   }
 
-#     random = {
-#       source  = "hashicorp/random"
-#       version = "3.1.0"
-#     }
+  backend "azurerm" {
+     resource_group_name  = "Terraform-lab-rg"
+    storage_account_name = "alcavdes1tsa1"
+    container_name       = "terraform"
+    key                  = "terraform.tfstate"
+  }
+}
 
-#   }
-  
-#   backend "azurerm" {
-
-#     resource_group_name  = "Terraform-lab-rg"
-#     storage_account_name = "alcavdes1tsa1"
-#     container_name       = "terraform"
-#     key                  = "terraform.tfstate"
-#   }
-# }
-
-# provider "azurerm" {
-#    features {}
-# }
+provider "azurerm" {
+   features {}
+}
 
 
 #######uncomment when run in Azure Devops and rename backend.tf and providers.tf
