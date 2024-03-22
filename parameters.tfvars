@@ -13,7 +13,6 @@ createalzkv                   = true
 createauditsta                = true
 creatediagsta                 = true
 createhub1                    = true
-createhub2                    = false
 create_vms                    = true
 create_data_disks             = true
 vm_number                     = 1
@@ -28,19 +27,18 @@ load_balancer_sku             = "Standard"
 private_ip_allocation         = "static"
 private_ip                    = "10.46.0.133"
 pip_sku                       = "Standard"
-vpn_pip_allocation_method     = "Dynamic"
+vpn_pip_allocation_method     = "Static"
 private_ip_address_allocation = "Dynamic"
 vng_type                      = "Vpn"
 vpn_type                      = "RouteBased"
 vpn_sku                       = "VpnGw1"
-create_vpn                    = false
-
+create_vpn                    = true
 audit_rg                      = "audit-logs"
 monitoring_rg                 = "monitoring"
 action_group                  = "action_group_1"
 costmgmt_rg                   = "costmgmt"
 keyvault_rg                   = "keys"
-hub_network_rg                    = "network"
+hub_network_rg                = "network"
 sharednetwork_rg              = "shared-network"
 backup_rg                     = "backup"
 aads_rg                       = "app-POWERBI"
@@ -52,12 +50,15 @@ cost_mgmt_sta                 = "costmgmt"
 workload_vnetname             = "workload"
 hubvnet                       = "hub-network"
 pip_vng                       = "vpn_vng"
-pip_sku                       = "Standard"
 vpn_name                      = "amv-vpn"
-platform_keyvault             = "platform-keys"
+platform_keyvault             = "keyv"
 recovery_sta                  = "recovery"
 recovery_aut_acc              = "recovery"
 recovery_rsv                  = "asr"
+sharedvnet                    = "shared"
+fw_name                       = "amvacfw"
+pip_fw                        = "firewall-pip"
+pip_nat_gw                    = "natgw_pip"
 
 data_disks = {
   disk0 = {
@@ -84,7 +85,7 @@ vm_size              = "Standard_B2s"
 admin_username       = "eitadm"
 vm_publisher         = "MicrosoftWindowsServer"
 vm_offer             = "WindowsServer"
-vm_sku               = "2016-Datacenter"
+vm_sku               = "2019-Datacenter"
 vm_version           = "latest"
 keyvault_secret_name = "Terraform-vm-password"
 #########################################Parameters for virtual machine######################################################
@@ -92,7 +93,7 @@ keyvault_secret_name = "Terraform-vm-password"
 
 
 address_space_hub1   = ["10.32.92.0/22"]
-address_space_shared = ["10.45.0.0/22"]
+address_space_shared = ["10.32.96.0/22"]
 address_app_network  = ["10.32.100.0/22"]
 
 subnets_hub1 = {
@@ -120,20 +121,13 @@ subnets_hub1 = {
 subnets_shared = {
   subnet0 = {
     index          = 0
-    name           = "sharedServicesSubnet"
-    address_prefix = "10.45.0.0/25"
-    security_group = "sharedServicesSubnet-nsg"
+    name           = "IdentitySubnet"
+    address_prefix = "10.32.96.0/22"
+    security_group = "IdentitySubnet-nsg"
     creatensg      = true
     create_rt      = true
   }
 
-  #   subnet1 = {
-  #     index          = 1
-  #     name           = "sharedSubnet"
-  #     address_prefix = "10.43.0.0/25"
-  #     security_group = "sharedSubnet-nsg"
-  #     creatensg      = true
-  #   }  
 }
 
 app_subnets = {

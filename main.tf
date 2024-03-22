@@ -52,8 +52,8 @@ locals {
   luns = { for k in local.lun_map : k.datadisk_name => k.lun }
 
 #######################################################Local variables for App Vnet####################################################################
-  app_subnet_ids          = tolist([for sub in module.app_vnet.subnets : sub.id ])
-  app_rt_ids              = tolist([for rt in module.app_vnet_rt.route_tables : rt.id])   ##### cambiar por modulo de route tables para obtner los IDs
+  app_subnet_ids          = tolist([for sub in module.workload_vnet.subnets : sub.id ])
+  app_rt_ids              = tolist([for rt in module.workload_vnet_rt.route_tables : rt.id])   ##### cambiar por modulo de route tables para obtner los IDs
   app_subnet_names        = tolist([for i in values(var.app_subnets) : i.name if i.create_rt])
   app_rt_associations     = tomap({
     subnet_id = flatten([for subname in local.app_subnet_names : [ for subid in local.app_subnet_ids : subid if strcontains(subid,subname)]])
@@ -76,17 +76,7 @@ locals {
 
 #######################################################Local variables for hub1 Vnet####################################################################
 
-#######################################################Local variables for hub2 Vnet####################################################################
-  hub2_subnet_ids          = tolist([for sub in module.hub_vnet_rgn2.subnets : sub.id ])
-  hub2_rt_ids              = tolist([for rt in module.hub_vnet_rgn2_rt.route_tables : rt.id])
-  hub2_subnet_names        = tolist([for i in values(var.subnets_hub2) : i.name if i.create_rt])
-  hub2_rt_associations     = tomap({
-    subnet_id = flatten([for subname in local.hub2_subnet_names : [ for subid in local.hub2_subnet_ids : subid if strcontains(subid,subname)]])
-    rt_id     = flatten([for subname in local.hub2_subnet_names : [ for rtid in local.hub2_rt_ids : rtid if strcontains(rtid,subname)]])
-  })
-  hub2_rt_sub_associations = zipmap(values(local.hub2_rt_associations)[1], values(local.hub2_rt_associations)[0])
 
-#######################################################Local variables for hub2 Vnet####################################################################
 
 #######################################################Local variables for shared Vnet####################################################################
   shared_subnet_ids          = tolist([for sub in module.shared_vnet.subnets : sub.id ])
@@ -175,7 +165,7 @@ module "cost_mgmt_sa" {
   source                   = "./az_storage_account"
   count                    = var.creatediagsta ? 1 : 0
   //storageaccountname       = lower("${var.CustomerID}diagalz${var.regions[var.location]}sta")
-  storageaccountname       = lower("${var.cost_mgmt_sta}{${var.regions[var.location]}sta")
+  storageaccountname       = lower("${var.cost_mgmt_sta}${var.regions[var.location]}sta")
   rgname                   = module.costmgmt_RG.rg_name
   location                 = var.location
   account_tier             = var.account_tier
@@ -364,28 +354,28 @@ module "hub_vnet_rgn1" {
   source = "./az_virtual_network"
   //count         = var.createhub1 ? 1 : 0
   //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
-  vnetname      = lower("var.hubvnet-${var.regions[var.location]}-1")
+  vnetname      = lower("${var.hubvnet}-${var.regions[var.location]}-vnet")
   rgname        = module.hub_network_rg.rg_name
   location      = var.location
   address_space = var.address_space_hub1
   subnets       = var.subnets_hub1
   environment   = var.environment
   tags_rsrc = {
-    Environment             = "Connectivity"
-    Location                = var.location
-    "Bussiness Criticality" = "High"
-    "Data Classification"   = "General"
-    "Business unit"         = "N/A"
-    "Operations team"       = "Cloud Operations"
-    "Cost center"           = "Exactlyit"
+    # Environment             = "Connectivity"
+    # Location                = var.location
+    # "Bussiness Criticality" = "High"
+    # "Data Classification"   = "General"
+    # "Business unit"         = "N/A"
+    # "Operations team"       = "Cloud Operations"
+    # "Cost center"           = "Exactlyit"
   }
-  depends_on = [module.network_RG]
+  depends_on = [module.hub_network_rg]
 }
 
 module "hub_vnet_rgn1_rt" {
   source        = "./az_route_table"
   subnets       =  var.subnets_hub1
-  rgname        = module.network_RG.rg_name
+  rgname        = module.hub_network_rg.rg_name
   location      = var.location
   address_space = var.address_space_hub1
   depends_on    = [module.hub_vnet_rgn1]
@@ -415,7 +405,7 @@ module "fw_pip" {
   location          = var.location
   pip_name          = lower("${var.pip_fw}${var.regions[var.location]}-vpn-pip")
   rgname            = module.hub_network_rg.rg_name
-  allocation_method = var.vpn_pip_allocation_method
+  allocation_method = var.allocation_method
   pip_sku           = var.pip_sku
   tags_rsrc = {
     # Environment             = "PRD"
@@ -446,6 +436,18 @@ module "pip_nat_gw" {
     # "Cost center"           = "Exactlyit"
   }
   depends_on = [module.hub_network_rg]
+}
+
+
+module "az_fw_in_out" {
+  source            = "./az_firewall"
+  fw_name           = var.fw_name
+  location          = var.location
+  rgname            = module.hub_network_rg.rg_name
+  fw_sku_name       = var.fw_sku_name
+  fw_sku_tier       = var.fw_sku_tier
+  fw_subnet_id      = element(module.hub_vnet_rgn1.fwsubnetid,0)
+  fw_pip_id         = module.fw_pip.pip_id
 }
 
 
@@ -544,6 +546,84 @@ module "dr_rsv" {
   depends_on = [module.recovery_rg]
 }
 
+module "sharednetwork_RG" {
+  source = "./az_resource_group"  
+  rgname   = lower("${var.sharednetwork_rg}-${var.regions[var.location]}-rg")
+  location = var.location
+  tags_rg = {
+    # Environment = "Shared"
+    # Location    = var.location
+  }
+}
+
+
+
+module "shared_vnet" {
+  source = "./az_virtual_network"
+  //count         = var.createhub1 ? 1 : 0
+  //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
+  vnetname      = lower("${var.sharedvnet}-${var.regions[var.location]}-vnet")
+  rgname        = module.sharednetwork_RG.rg_name
+  location      = var.location
+  address_space = var.address_space_shared
+  subnets       = var.subnets_shared
+  environment   = var.environment
+  tags_rsrc = {
+    # Environment             = "Shared"
+    # Location                = var.location
+    # "Bussiness Criticality" = "High"
+    # "Data Classification"   = "General"
+    # "Business unit"         = "N/A"
+    # "Operations team"       = "Cloud Operations"
+    # "Cost center"           = "Exactlyit"
+  }
+  depends_on = [module.sharednetwork_RG]
+}
+
+module "shared_vnet_rt" {
+  source        = "./az_route_table"
+  subnets       =  var.subnets_shared
+  rgname        = module.sharednetwork_RG.rg_name
+  location      = var.location
+  address_space = var.address_space_shared
+  depends_on    = [module.shared_vnet]
+}
+
+module "windows_vm" {
+  source         = "./az_windows_vm"
+  count          = var.create_vms ? var.vm_number : 0
+  location       = var.location
+  rgname         = module.sharednetwork_RG.rg_name
+  subnet_id      = module.shared_vnet.subnetiddc
+  keyvault_id    = module.keyvault[0].azurerm_key_vault_id
+  vm_name        = lower("${var.CustomerID}dc${var.regions[var.location]}p0${count.index}")
+  vm_size        = var.vm_size
+  admin_username = var.admin_username
+  vm_publisher   = var.vm_publisher
+  vm_offer       = var.vm_offer
+  vm_sku         = var.vm_sku
+  vm_version     = var.vm_version
+  vm_password    = module.secret_key.key_vault_secret
+  tags_rsrc = {
+    # Environment             = "Domain Controller"
+    # Location                = var.location
+    # "Bussiness Criticality" = "High"
+    # "Data Classification"   = "Confidential"
+    # "Business unit"         = "N/A"
+    # "Operations team"       = "Cloud Operations"
+    # "Cost center"           = "Exactlyit"
+    # "Disaster Recovery"     = "DR required"
+    # "Patching"              = "Win-3-Sat-CST-Reboot"
+    # "Backup"                = "Commvault"
+  }
+  depends_on = [
+    module.sharednetwork_RG,
+    module.keyvault,
+    module.shared_vnet
+  ]
+
+}
+
 ############################################PLATFORM SUBSCRIPTION######################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
@@ -588,7 +668,7 @@ module "workload_vnet" {
   depends_on = [module.app_network_rg]
 }
 
-module "app_vnet_rt" {
+module "workload_vnet_rt" {
   source        = "./az_route_table"
   subnets       =  var.app_subnets
   rgname        = module.app_network_rg.rg_name
@@ -607,80 +687,47 @@ module "app_RG" {
   }
 }
 
-module "windows_vm" {
-  source         = "./az_windows_vm"
-  count          = var.create_vms ? var.vm_number : 0
-  location       = var.location
-  rgname         = module.app_RG.rg_name
-  subnet_id      = module.shared_vnet.subnetiddc
-  keyvault_id    = module.keyvault[0].azurerm_key_vault_id
-  vm_name        = lower("${var.CustomerID}dc${var.regions[var.location]}p0${count.index}")
-  vm_size        = var.vm_size
-  admin_username = var.admin_username
-  vm_publisher   = var.vm_publisher
-  vm_offer       = var.vm_offer
-  vm_sku         = var.vm_sku
-  vm_version     = var.vm_version
-  vm_password    = module.secret_key.key_vault_secret
-  tags_rsrc = {
-    # Environment             = "Domain Controller"
-    # Location                = var.location
-    # "Bussiness Criticality" = "High"
-    # "Data Classification"   = "Confidential"
-    # "Business unit"         = "N/A"
-    # "Operations team"       = "Cloud Operations"
-    # "Cost center"           = "Exactlyit"
-    # "Disaster Recovery"     = "DR required"
-    # "Patching"              = "Win-3-Sat-CST-Reboot"
-    # "Backup"                = "Commvault"
-  }
-  depends_on = [
-    module.aads_RG,
-    module.keyvault,
-    module.shared_vnet
-  ]
-
-}
-
-module "managed_disk" {
-  source = "./az_managed_disk"
-  //for_each  = local.luns
-  for_each  = var.create_data_disks ? local.luns : {}
-  disk_name = each.key
-  location  = var.location
-  rgname    = module.aads_RG.rg_name
-  disk_type = values(var.data_disks)[each.value].disk_type
-  disk_size = values(var.data_disks)[each.value].disk_size
-  tags_rsrc = {
-    Environment             = "Shared"
-    Location                = var.location
-    "Bussiness Criticality" = "High"
-    "Data Classification"   = "General"
-    "Business unit"         = "N/A"
-    "Operations team"       = "Cloud Operations"
-    "Cost center"           = "Exactlyit"
-  }
-  depends_on = [
-    module.windows_vm,
-    module.aads_RG
-  ]
-}
 
 
-module "disk_attachment" {
-  source   = "./az_mngd_disk_attachment"
-  for_each = length(module.managed_disk) < 1 ? {} : { for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id }
-  //for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
-  disk_id = each.value
-  vm_id   = lookup({ for vm in module.windows_vm : vm.vm_name => vm.vm_id }, substr(each.key, 0, 11))  //replace lenght vm.vm_name with eleven
-  lun_id  = tonumber(lookup(local.luns, each.key))
-  caching = var.cache_mode
-  depends_on = [
-    module.aads_RG,
-    module.managed_disk,
-    module.windows_vm
-  ]
-}
+# module "managed_disk" {
+#   source = "./az_managed_disk"
+#   //for_each  = local.luns
+#   for_each  = var.create_data_disks ? local.luns : {}
+#   disk_name = each.key
+#   location  = var.location
+#   rgname    = module.app_RG.rg_name
+#   disk_type = values(var.data_disks)[each.value].disk_type
+#   disk_size = values(var.data_disks)[each.value].disk_size
+#   tags_rsrc = {
+#     Environment             = "Shared"
+#     Location                = var.location
+#     "Bussiness Criticality" = "High"
+#     "Data Classification"   = "General"
+#     "Business unit"         = "N/A"
+#     "Operations team"       = "Cloud Operations"
+#     "Cost center"           = "Exactlyit"
+#   }
+#   depends_on = [
+#     module.windows_vm,
+#     module.app_RG
+#   ]
+# }
+
+
+# module "disk_attachment" {
+#   source   = "./az_mngd_disk_attachment"
+#   for_each = length(module.managed_disk) < 1 ? {} : { for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id }
+#   //for_each             = {for disk in values(module.managed_disk)[*] : disk.disk_name => disk.disk_id}
+#   disk_id = each.value
+#   vm_id   = lookup({ for vm in module.windows_vm : vm.vm_name => vm.vm_id }, substr(each.key, 0, 11))  //replace lenght vm.vm_name with eleven
+#   lun_id  = tonumber(lookup(local.luns, each.key))
+#   caching = var.cache_mode
+#   depends_on = [
+#     module.app_RG,
+#     module.managed_disk,
+#     module.windows_vm
+#   ]
+#}
 
 
 
@@ -688,99 +735,6 @@ module "disk_attachment" {
 ####################################################################################################################################################
 ####################################################################################################################################################
 ####################################################################################################################################################
-
-##################################################SHARED SUBSCRIPTION###############################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-
-
-module "sharednetwork_RG" {
-  source = "./az_resource_group"  
-  rgname   = lower("${var.sharednetwork_rg}-${var.regions[var.location]}-rg")
-  location = var.location
-  tags_rg = {
-    Environment = "Shared"
-    Location    = var.location
-  }
-}
-
-
-
-module "shared_vnet" {
-  source = "./az_virtual_network"
-  //count         = var.createhub1 ? 1 : 0
-  //vnetname      = lower("${var.CustomerID}-${var.environment}-${var.regions[var.location]}-vnet")
-  vnetname      = lower("sharedvnet-${var.regions[var.location]}")
-  rgname        = module.sharednetwork_RG.rg_name
-  location      = var.location
-  address_space = var.address_space_shared
-  subnets       = var.subnets_shared
-  environment   = var.environment
-  tags_rsrc = {
-    Environment             = "Shared"
-    Location                = var.location
-    "Bussiness Criticality" = "High"
-    "Data Classification"   = "General"
-    "Business unit"         = "N/A"
-    "Operations team"       = "Cloud Operations"
-    "Cost center"           = "Exactlyit"
-  }
-  depends_on = [module.sharednetwork_RG]
-}
-
-module "shared_vnet_rt" {
-  source        = "./az_route_table"
-  subnets       =  var.subnets_shared
-  rgname        = module.sharednetwork_RG.rg_name
-  location      = var.location
-  address_space = var.address_space_shared
-  depends_on    = [module.shared_vnet]
-}
-
-
-module "shared_SA" {
-  source                   = "./az_storage_account"
-  count                    = var.creatediagsta ? 1 : 0
-  storageaccountname       = lower("${var.shared_sta}${var.regions[var.location]}sta")
-  rgname                   = module.aads_RG.rg_name
-  location                 = var.location
-  account_tier             = var.account_tier
-  account_replication_type = var.account_replication_type
-  tags_rsrc = {
-    Environment             = "Shared"
-    Location                = var.location
-    "Bussiness Criticality" = "High"
-    "Data Classification"   = "General"
-    "Business unit"         = "N/A"
-    "Operations team"       = "Cloud Operations"
-    "Cost center"           = "Exactlyit"
-  }
-  depends_on = [module.aads_RG]
-}
-
-##################################################SHARED SUBSCRIPTION###############################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-
-
-
-
-######################################################DR SUBSCRIPTION###############################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-
-
-######################################################DR SUBSCRIPTION###############################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-####################################################################################################################################################
-
-
-
-
 
 # output "vm_names" {
 #   value = local.vm_w_mndg_disks

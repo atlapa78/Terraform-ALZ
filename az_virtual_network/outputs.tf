@@ -18,6 +18,10 @@ output "subnetlbid" {
 output "gatewayid" {
   value = [for subnet in azurerm_virtual_network.az_vnet.subnet : subnet.id if subnet.name == "GatewaySubnet"]
 }
+
+output "fwsubnetid" {
+  value = [for subnet in azurerm_virtual_network.az_vnet.subnet : subnet.id if subnet.name == "AzureFirewallSubnet"]
+}
 output "subnets" {
   value = azurerm_virtual_network.az_vnet.subnet
 }

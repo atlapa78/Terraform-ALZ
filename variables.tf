@@ -270,6 +270,11 @@ variable "hubvnet" {
   description = "Name of the hub virtual network"
 }
 
+variable "sharedvnet" {
+  type        = string 
+  description = "Name of the shared virtual network"
+}
+
 variable "pip_vng" {
   type        = string
   description = "Name of the PIP for the VPN VNG"
@@ -285,10 +290,10 @@ variable "pip_nat_gw" {
   description = "Name of the PIP for the Nat GW"
 }
 
-variable "pip_sku" {
-    type        = string
-  description = "SKU for the Public IP for VPN VNG"
-}
+# variable "pip_sku" {
+#     type        = string
+#   description = "SKU for the Public IP for VPN VNG"
+# }
 
 variable "vpn_name" {
     type        = string
@@ -301,12 +306,6 @@ variable "createhub1" {
   default     = true
 }
 
-variable "createhub2" {
-  type        = bool
-  description = "used for vnet hub2 creation"
-  default     = true
-}
-
 variable "environment" {
   description = "environment where the resources are going to be created"
   type        = string
@@ -314,11 +313,6 @@ variable "environment" {
 
 variable "address_space_hub1" {
   description = "CIDR of the vnet for hub1"
-  type        = list(any)
-}
-
-variable "address_space_hub2" {
-  description = "CIDR of the vnet for hub2"
   type        = list(any)
 }
 
@@ -334,10 +328,6 @@ variable "address_app_network" {
 }
 
 variable "subnets_hub1" {
-  type = map(any)
-}
-
-variable "subnets_hub2" {
   type = map(any)
 }
 
@@ -362,6 +352,26 @@ variable "allocation_method" {
   default     = "Dynamic"
 
 }
+
+variable "fw_name" {
+  type        = string
+  description = "Name of the Azure Firewall"  
+}
+
+variable "fw_sku_name" {
+  type        = string
+  description = "(Required) SKU name of the Firewall. Possible values are AZFW_Hub and AZFW_VNet. Changing this forces a new resource to be created"
+  default     = "AZFW_VNet"
+}
+
+
+variable "fw_sku_tier" {
+  type        = string
+  description = "(Required) SKU tier of the Firewall. Possible values are Premium, Standard and Basic"
+  default     = "Standard"
+}
+
+
 
 ######################Azure Vnet variables##########################
 
