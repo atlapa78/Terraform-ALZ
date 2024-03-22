@@ -11,7 +11,7 @@ pool:
 
 variables:
   bkstrgrg: 'Terraform-lab-rg'
-  bkstrgacc: 'alcavdes1tsa1'
+  bkstrgacc: 'terraformtlapainc'
   bkcontainer: 'terraform'
   bkstrgkey: 'terraform.tfstate'
 
@@ -31,7 +31,7 @@ stages:
               provider: 'azurerm'
               command: 'init'
               commandOptions: '-reconfigure'
-              backendServiceArm: 'terraform SP - AZ -Students'
+              backendServiceArm: 'TERRAFORMLZ-SVC'
               backendAzureRmResourceGroupName: '$(bkstrgrg)'
               backendAzureRmStorageAccountName: '$(bkstrgacc)'
               backendAzureRmContainerName: '$(bkcontainer)'
@@ -57,7 +57,7 @@ stages:
               provider: 'azurerm'
               command: 'init'
               commandOptions: '-reconfigure'
-              backendServiceArm: 'terraform SP - AZ -Students'
+              backendServiceArm: 'TERRAFORMLZ-SVC'
               backendAzureRmResourceGroupName: '$(bkstrgrg)'
               backendAzureRmStorageAccountName: '$(bkstrgacc)'
               backendAzureRmContainerName: '$(bkcontainer)'
@@ -68,13 +68,13 @@ stages:
               provider: 'azurerm'
               command: 'plan'
               commandOptions: '-var-file parameters.tfvars'
-              environmentServiceNameAzureRM: 'terraform SP - AZ -Students'
+              environmentServiceNameAzureRM: 'TERRAFORMLZ-SVC'
           - task: TerraformTaskV4@4
             displayName: Apply
             inputs:
               provider: 'azurerm'
               command: 'apply'
               commandOptions: '-var-file parameters.tfvars'
-              environmentServiceNameAzureRM: 'terraform SP - AZ -Students'
+              environmentServiceNameAzureRM: 'TERRAFORMLZ-SVC'
 
 
