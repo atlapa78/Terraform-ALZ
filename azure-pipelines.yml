@@ -9,11 +9,11 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-  bkstrgrg: 'Terraform-lab-rg'
-  bkstrgacc: 'terraformtlapainc'
-  bkcontainer: 'terraform'
-  bkstrgkey: 'terraform.tfstate'
+#variables:
+  # bkstrgrg: 'Terraform-lab-rg'
+  # bkstrgacc: 'terraformtlapainc'
+  # bkcontainer: 'terraform'
+  # bkstrgkey: 'terraform.tfstate'
 
 stages:
   - stage: tfvalidate
@@ -30,12 +30,12 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              commandOptions: '-force-copy'
-              backendServiceArm: 'TERRAFORMLZ-SVC'
-              backendAzureRmResourceGroupName: '$(bkstrgrg)'
-              backendAzureRmStorageAccountName: '$(bkstrgacc)'
-              backendAzureRmContainerName: '$(bkcontainer)'
-              backendAzureRmKey: '$(bkstrgkey)'
+              #commandOptions: '-force-copy'
+              backendServiceArm: 'TERRAFORMLZ-SVC-SUB2'
+              # backendAzureRmResourceGroupName: '$(bkstrgrg)'
+              # backendAzureRmStorageAccountName: '$(bkstrgacc)'
+              # backendAzureRmContainerName: '$(bkcontainer)'
+              # backendAzureRmKey: '$(bkstrgkey)'
           - task: TerraformTaskV4@4
             displayName: Validate
             inputs:
@@ -56,25 +56,25 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              commandOptions: '-force-copy'
-              backendServiceArm: 'TERRAFORMLZ-SVC'
-              backendAzureRmResourceGroupName: '$(bkstrgrg)'
-              backendAzureRmStorageAccountName: '$(bkstrgacc)'
-              backendAzureRmContainerName: '$(bkcontainer)'
-              backendAzureRmKey: '$(bkstrgkey)' 
+              #commandOptions: '-force-copy'
+              backendServiceArm: 'TERRAFORMLZ-SVC-SUB2'
+              # backendAzureRmResourceGroupName: '$(bkstrgrg)'
+              # backendAzureRmStorageAccountName: '$(bkstrgacc)'
+              # backendAzureRmContainerName: '$(bkcontainer)'
+              # backendAzureRmKey: '$(bkstrgkey)' 
           - task: TerraformTaskV4@4
             displayName: Plan
             inputs:
               provider: 'azurerm'
               command: 'plan'
               commandOptions: '-var-file parameters.tfvars'
-              environmentServiceNameAzureRM: 'TERRAFORMLZ-SVC'
+              environmentServiceNameAzureRM: 'TERRAFORMLZ-SVC-SUB2'
           - task: TerraformTaskV4@4
             displayName: Apply
             inputs:
               provider: 'azurerm'
               command: 'apply'
               commandOptions: '-var-file parameters.tfvars'
-              environmentServiceNameAzureRM: 'TERRAFORMLZ-SVC'
+              environmentServiceNameAzureRM: 'TERRAFORMLZ-SVC-SUB2'
 
 
