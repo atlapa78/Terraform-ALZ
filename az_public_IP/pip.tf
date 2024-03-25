@@ -1,3 +1,4 @@
+
 resource "azurerm_public_ip" "pip" {
   name                = var.pip_name
   location            = var.location

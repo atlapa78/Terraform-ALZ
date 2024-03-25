@@ -1,3 +1,4 @@
+
 resource "azurerm_lb" "az_lb" {
   name                = var.az_lb_name
   location            = var.location

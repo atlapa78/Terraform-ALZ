@@ -14,10 +14,10 @@ variable "subnet_id" {
 
 }
 
-variable "keyvault_id" {
-  type        = string
-  description = "ID of the keyvault used for the genrated password"
-}
+# variable "keyvault_id" {
+#   type        = string
+#   description = "ID of the keyvault used for the genrated password"
+# }
 
 variable "vm_name" {
   type        = string

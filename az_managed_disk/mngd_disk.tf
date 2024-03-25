@@ -1,3 +1,4 @@
+
 resource "azurerm_managed_disk" "disk" {
   name                 = var.disk_name
   location             = var.location

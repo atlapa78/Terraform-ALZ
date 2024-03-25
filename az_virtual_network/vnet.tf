@@ -1,3 +1,5 @@
+
+
 locals { 
   subnet_ids             = tolist([for subnet in azurerm_virtual_network.az_vnet.subnet : subnet.id ]) 
   //rt_ids                 = tolist([for rt in azurerm_route_table.subnet-rt : rt.id])

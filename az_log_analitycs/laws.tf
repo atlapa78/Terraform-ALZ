@@ -1,3 +1,4 @@
+
 resource "azurerm_log_analytics_workspace" "laws" {
   name                = var.laws_name
   location            = var.location

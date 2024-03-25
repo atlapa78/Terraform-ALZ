@@ -1,3 +1,5 @@
+
+
 resource "azurerm_virtual_network_gateway" "vpn" {
   name                            = var.vpn_name
   location                        = var.location

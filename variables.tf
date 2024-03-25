@@ -46,7 +46,7 @@ variable "regions" {
     northcentralus     = "ncu"
     southcentralus     = "scu"
     westcentralus      = "wcu"
-    westus             = "wu"
+    westus             = "wu1"
     westus2            = "wu2"
     westus3            = "wu3"
   }
@@ -123,6 +123,16 @@ variable "aads_rg" {
   description = "Name for the aads RG"
 }
 
+variable "app_rg" {
+  type        = string
+  description = "Name for the app RG"
+}
+
+
+variable "vm_password" {
+  type        = string
+  description = "Password for the DC"
+}
 
 variable "app_network_rg" {
   type        = string

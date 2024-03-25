@@ -1,3 +1,4 @@
+
 resource "azurerm_storage_account" "storage_account" {
   name                     = var.storageaccountname
   resource_group_name      = var.rgname

@@ -1,3 +1,4 @@
+
 resource "azurerm_firewall" "firewall" {
   name                = var.fw_name
   location            = var.location
