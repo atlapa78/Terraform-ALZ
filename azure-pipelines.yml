@@ -30,7 +30,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              commandOptions: '-force-copy'
+              #commandOptions: '-force-copy'
               backendServiceArm: 'TERRAFORMLZ-SVC-SUB2'
               # backendAzureRmResourceGroupName: '$(bkstrgrg)'
               # backendAzureRmStorageAccountName: '$(bkstrgacc)'
@@ -56,7 +56,7 @@ stages:
             inputs:
               provider: 'azurerm'
               command: 'init'
-              commandOptions: '-force-copy'
+              #commandOptions: '-force-copy'
               backendServiceArm: 'TERRAFORMLZ-SVC-SUB2'
               # backendAzureRmResourceGroupName: '$(bkstrgrg)'
               # backendAzureRmStorageAccountName: '$(bkstrgacc)'
