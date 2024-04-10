@@ -46,7 +46,7 @@ variable "regions" {
     northcentralus     = "ncu"
     southcentralus     = "scu"
     westcentralus      = "wcu"
-    westus             = "wu"
+    westus             = "wu1"
     westus2            = "wu2"
     westus3            = "wu3"
   }
@@ -123,6 +123,11 @@ variable "aads_rg" {
   description = "Name for the aads RG"
 }
 
+variable "app_rg" {
+  type        = string
+  description = "Name for the app RG"
+}
+
 
 variable "app_network_rg" {
   type        = string
@@ -149,6 +154,19 @@ variable "recovery_rg" {
 ######################General purpose variables##########################
 
 ######################Log Analitycs Workspace variables##########################
+variable "audit_laws_name" {
+  type        = string
+  description = "Name of the log analytics workspace for audit"
+}
+
+
+variable "monitoring_log_name" {
+  type        = string
+  description = "Name of the log analytics workspace for monitoring"
+}
+
+
+
 variable "laws_sku" {
   type        = string
   description = "SKU for the log analytics workspace"
@@ -205,17 +223,30 @@ variable "soft_delete_retention_days" {
 
 ######################Storage Account variables##########################
 
+
+variable "audit_sta_name" {
+  type        = string
+  description = "Name for the audit storage account"
+}
+
+
 variable "createauditsta" {
   type        = bool
   description = "used for audit keyvault creation"
   default     = true
 }
 
-variable "creatediagsta" {
+variable "createcoststa" {
   type        = bool
   description = "used for audit keyvault creation"
   default     = true
 }
+
+variable "createfirewall" {
+  type        = bool
+  description = "used for Azure Firewall creation"
+}
+
 
 variable "account_tier" {
   type        = string
@@ -275,6 +306,39 @@ variable "sharedvnet" {
   description = "Name of the shared virtual network"
 }
 
+variable "fw_policy_name" {
+  type        = string
+  description = "Name for the Azure Firewall Policy"
+}
+
+
+
+variable "priority_group_rule" {
+    type            = number
+    description     = "Used to define the priority of the collection rule"
+}
+
+variable "az_fw_policy_net_rule_action" {
+  type        = string
+  description = "The action to take for the application rules in this collection. Possible values are Allow and Deny."
+}
+
+variable "priority_net_rule" {
+    type            = number
+    description     = "Used to define the priority of the collection rule"
+}
+
+variable "az_fw_policy_group_rule_name" {
+  type        = string
+  description = "Name for the resource group for the Azure Firewall Policy"
+}
+
+
+variable "az_fw_policy_net_rule_name" {
+  type        = string
+  description = "Name for the resource group for the Azure Firewall Policy"
+}
+
 variable "pip_vng" {
   type        = string
   description = "Name of the PIP for the VPN VNG"
@@ -285,9 +349,20 @@ variable "pip_fw" {
   description = "Name of the PIP for the Azure Firewall"
 }
 
+variable "mgmt_pip_fw" {
+  type        = string
+  description = "Name of the PIP for Azure Firewall Management"
+}
+
+
 variable "pip_nat_gw" {
   type        = string
   description = "Name of the PIP for the Nat GW"
+}
+
+variable "create_pip_nat_gw" {
+  type        = bool
+  description = "To create or not the PIP for the Nat GW"
 }
 
 # variable "pip_sku" {
@@ -414,6 +489,11 @@ variable "admin_username" {
   default     = "azureuser"
 }
 
+variable "vm_password" {
+  type        = string
+  description = "Password for the DC"
+}
+
 variable "vm_publisher" {
   type        = string
   description = "Virtual machine publisher"
@@ -506,6 +586,12 @@ variable "aut_acc_sku" {
   description = " (Required) The SKU of the account. Possible values are Basic and Free"
   default     = "free"
 }
+
+variable "deploy_dr_aut_acc" {
+  type        = bool
+  description = " Used to create or not the automation account in the DR rg. Possible values are true or false"
+}
+
 ##################################################Automation Account variables##################################################
 
 #####################################################Load Balancer variables####################################################

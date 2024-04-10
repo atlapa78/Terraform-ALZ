@@ -1,0 +1,1139 @@
+{
+  "version": 4,
+  "terraform_version": "1.5.7",
+  "serial": 24,
+  "lineage": "4d7baaaa-f6cc-80d1-8fd8-64c936c750b1",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "data",
+      "type": "azurerm_client_config",
+      "name": "current",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "client_id": "1a0463b5-b07b-41ef-be76-446bf018420f",
+            "id": "Y2xpZW50Q29uZmlncy9jbGllbnRJZD0xYTA0NjNiNS1iMDdiLTQxZWYtYmU3Ni00NDZiZjAxODQyMGY7b2JqZWN0SWQ9MzBkY2ZkMzAtYzU4Yy00NzFlLTk2MDEtYzY2NDVmNzdhMWU0O3N1YnNjcmlwdGlvbklkPTc2ZWFhNjVlLWIyZjctNGViNC1iOTZjLWY5MWRiNTJmYmU4YTt0ZW5hbnRJZD02YjBlZTdmZC04MTY2LTQ3YTktYmM4OS0zMWE1NDBmMGRkZmY=",
+            "object_id": "30dcfd30-c58c-471e-9601-c6645f77a1e4",
+            "subscription_id": "76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a",
+            "tenant_id": "6b0ee7fd-8166-47a9-bc89-31a540f0ddff",
+            "timeouts": null
+          },
+          "sensitive_attributes": []
+        }
+      ]
+    },
+    {
+      "module": "module.aads_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/aads-wu1-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "aads-wu1-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.audit_SA[0]",
+      "mode": "managed",
+      "type": "azurerm_storage_account",
+      "name": "storage_account",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 4,
+          "attributes": {
+            "access_tier": "Hot",
+            "account_kind": "StorageV2",
+            "account_replication_type": "LRS",
+            "account_tier": "Standard",
+            "allow_nested_items_to_be_public": true,
+            "allowed_copy_scope": "",
+            "azure_files_authentication": [],
+            "blob_properties": [
+              {
+                "change_feed_enabled": false,
+                "change_feed_retention_in_days": 0,
+                "container_delete_retention_policy": [],
+                "cors_rule": [],
+                "default_service_version": "",
+                "delete_retention_policy": [],
+                "last_access_time_enabled": false,
+                "restore_policy": [],
+                "versioning_enabled": false
+              }
+            ],
+            "cross_tenant_replication_enabled": true,
+            "custom_domain": [],
+            "customer_managed_key": [],
+            "default_to_oauth_authentication": false,
+            "edge_zone": "",
+            "enable_https_traffic_only": true,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/audit-logs-glb-rg/providers/Microsoft.Storage/storageAccounts/auditstgwu1sta",
+            "identity": [],
+            "immutability_policy": [],
+            "infrastructure_encryption_enabled": false,
+            "is_hns_enabled": false,
+            "large_file_share_enabled": null,
+            "location": "westus",
+            "min_tls_version": "TLS1_2",
+            "name": "auditstgwu1sta",
+            "network_rules": [
+              {
+                "bypass": [
+                  "AzureServices"
+                ],
+                "default_action": "Allow",
+                "ip_rules": [],
+                "private_link_access": [],
+                "virtual_network_subnet_ids": []
+              }
+            ],
+            "nfsv3_enabled": false,
+            "primary_access_key": "/+1MxJBEs6hG+D9RaB54WutbSEhMAvdT+kro3A34JadeTjQfOHuk8vXSqWGUakx+d2g/C9NLKHWz+AStS8Bq7A==",
+            "primary_blob_connection_string": "DefaultEndpointsProtocol=https;BlobEndpoint=https://auditstgwu1sta.blob.core.windows.net/;AccountName=auditstgwu1sta;AccountKey=/+1MxJBEs6hG+D9RaB54WutbSEhMAvdT+kro3A34JadeTjQfOHuk8vXSqWGUakx+d2g/C9NLKHWz+AStS8Bq7A==",
+            "primary_blob_endpoint": "https://auditstgwu1sta.blob.core.windows.net/",
+            "primary_blob_host": "auditstgwu1sta.blob.core.windows.net",
+            "primary_connection_string": "DefaultEndpointsProtocol=https;AccountName=auditstgwu1sta;AccountKey=/+1MxJBEs6hG+D9RaB54WutbSEhMAvdT+kro3A34JadeTjQfOHuk8vXSqWGUakx+d2g/C9NLKHWz+AStS8Bq7A==;EndpointSuffix=core.windows.net",
+            "primary_dfs_endpoint": "https://auditstgwu1sta.dfs.core.windows.net/",
+            "primary_dfs_host": "auditstgwu1sta.dfs.core.windows.net",
+            "primary_file_endpoint": "https://auditstgwu1sta.file.core.windows.net/",
+            "primary_file_host": "auditstgwu1sta.file.core.windows.net",
+            "primary_location": "westus",
+            "primary_queue_endpoint": "https://auditstgwu1sta.queue.core.windows.net/",
+            "primary_queue_host": "auditstgwu1sta.queue.core.windows.net",
+            "primary_table_endpoint": "https://auditstgwu1sta.table.core.windows.net/",
+            "primary_table_host": "auditstgwu1sta.table.core.windows.net",
+            "primary_web_endpoint": "https://auditstgwu1sta.z22.web.core.windows.net/",
+            "primary_web_host": "auditstgwu1sta.z22.web.core.windows.net",
+            "public_network_access_enabled": true,
+            "queue_encryption_key_type": "Service",
+            "queue_properties": [
+              {
+                "cors_rule": [],
+                "hour_metrics": [
+                  {
+                    "enabled": true,
+                    "include_apis": true,
+                    "retention_policy_days": 7,
+                    "version": "1.0"
+                  }
+                ],
+                "logging": [
+                  {
+                    "delete": false,
+                    "read": false,
+                    "retention_policy_days": 0,
+                    "version": "1.0",
+                    "write": false
+                  }
+                ],
+                "minute_metrics": [
+                  {
+                    "enabled": false,
+                    "include_apis": false,
+                    "retention_policy_days": 0,
+                    "version": "1.0"
+                  }
+                ]
+              }
+            ],
+            "resource_group_name": "audit-logs-glb-rg",
+            "routing": [],
+            "sas_policy": [],
+            "secondary_access_key": "L3RVQzzshw87YDUsE+ZX9E+A25XO093PuAnbvmvpie5NEiaAHK2MWPaxF2cQ3VroYU78Ed8mLtTK+AStNG6/Kw==",
+            "secondary_blob_connection_string": "",
+            "secondary_blob_endpoint": null,
+            "secondary_blob_host": null,
+            "secondary_connection_string": "DefaultEndpointsProtocol=https;AccountName=auditstgwu1sta;AccountKey=L3RVQzzshw87YDUsE+ZX9E+A25XO093PuAnbvmvpie5NEiaAHK2MWPaxF2cQ3VroYU78Ed8mLtTK+AStNG6/Kw==;EndpointSuffix=core.windows.net",
+            "secondary_dfs_endpoint": null,
+            "secondary_dfs_host": null,
+            "secondary_file_endpoint": null,
+            "secondary_file_host": null,
+            "secondary_location": "",
+            "secondary_queue_endpoint": null,
+            "secondary_queue_host": null,
+            "secondary_table_endpoint": null,
+            "secondary_table_host": null,
+            "secondary_web_endpoint": null,
+            "secondary_web_host": null,
+            "sftp_enabled": false,
+            "share_properties": [
+              {
+                "cors_rule": [],
+                "retention_policy": [
+                  {
+                    "days": 7
+                  }
+                ],
+                "smb": []
+              }
+            ],
+            "shared_access_key_enabled": true,
+            "static_website": [],
+            "table_encryption_key_type": "Service",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozNjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiI0In0=",
+          "dependencies": [
+            "module.auditlogs_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.auditlogs_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/audit-logs-glb-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "audit-logs-glb-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.auditlogs_WS",
+      "mode": "managed",
+      "type": "azurerm_log_analytics_workspace",
+      "name": "laws",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 3,
+          "attributes": {
+            "allow_resource_only_permissions": true,
+            "cmk_for_query_forced": false,
+            "daily_quota_gb": -1,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/audit-logs-glb-rg/providers/Microsoft.OperationalInsights/workspaces/auditlogs-wu1-workspace",
+            "internet_ingestion_enabled": true,
+            "internet_query_enabled": true,
+            "local_authentication_disabled": false,
+            "location": "westus",
+            "name": "auditlogs-wu1-workspace",
+            "primary_shared_key": "UGX/sEQVf/fte6vrsdSUOiOZ5QaDqlLwmlmcvi7m0MjakFm43rpKHmKHGIsgzUBqe4yf2u2qpG4Gz/onjE+sxw==",
+            "reservation_capacity_in_gb_per_day": null,
+            "resource_group_name": "audit-logs-glb-rg",
+            "retention_in_days": 90,
+            "secondary_shared_key": "skNIR45weEFKiOcmIBJjAnvp5F9xgs/oA8d5XdSooK+kWGhrWM2qjZsHETjIocoCRVak5VG9BBkXHRHm7o51mw==",
+            "sku": "PerGB2018",
+            "tags": null,
+            "timeouts": null,
+            "workspace_id": "4332e3f2-cde6-40a3-bafb-c0fbda0c0840"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIzIn0=",
+          "dependencies": [
+            "module.auditlogs_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.az_fw_in_out",
+      "mode": "managed",
+      "type": "azurerm_firewall",
+      "name": "firewall",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "dns_servers": null,
+            "firewall_policy_id": null,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/azureFirewalls/azfirewallwu1-fw",
+            "ip_configuration": [
+              {
+                "name": "configuration",
+                "private_ip_address": "10.25.92.4",
+                "public_ip_address_id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/publicIPAddresses/firewallwu1-pip",
+                "subnet_id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/virtualNetworks/hub-network-wu1-vnet/subnets/AzureFirewallSubnet"
+              }
+            ],
+            "location": "westus",
+            "management_ip_configuration": [],
+            "name": "azfirewallwu1-fw",
+            "private_ip_ranges": null,
+            "resource_group_name": "network-wu1-rg",
+            "sku_name": "AZFW_VNet",
+            "sku_tier": "Standard",
+            "tags": null,
+            "threat_intel_mode": "Alert",
+            "timeouts": null,
+            "virtual_hub": [],
+            "zones": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.fw_pip.azurerm_public_ip.pip",
+            "module.hub_network_rg.azurerm_resource_group.lawsrg",
+            "module.hub_vnet_rgn1.azurerm_network_security_group.vnet-nsg",
+            "module.hub_vnet_rgn1.azurerm_virtual_network.az_vnet"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.backup_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/backup-wu1-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "backup-wu1-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.backup_recovery_service_vault",
+      "mode": "managed",
+      "type": "azurerm_recovery_services_vault",
+      "name": "vault",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "classic_vmware_replication_enabled": null,
+            "cross_region_restore_enabled": false,
+            "encryption": [],
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/backup-wu1-rg/providers/Microsoft.RecoveryServices/vaults/backup-wu1-rsv",
+            "identity": [],
+            "immutability": null,
+            "location": "westus",
+            "monitoring": [],
+            "name": "backup-wu1-rsv",
+            "public_network_access_enabled": true,
+            "resource_group_name": "backup-wu1-rg",
+            "sku": "Standard",
+            "soft_delete_enabled": true,
+            "storage_mode_type": "GeoRedundant",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo3MjAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.backup_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.cost_mgmt_sa[0]",
+      "mode": "managed",
+      "type": "azurerm_storage_account",
+      "name": "storage_account",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 4,
+          "attributes": {
+            "access_tier": "Hot",
+            "account_kind": "StorageV2",
+            "account_replication_type": "LRS",
+            "account_tier": "Standard",
+            "allow_nested_items_to_be_public": true,
+            "allowed_copy_scope": "",
+            "azure_files_authentication": [],
+            "blob_properties": [
+              {
+                "change_feed_enabled": false,
+                "change_feed_retention_in_days": 0,
+                "container_delete_retention_policy": [],
+                "cors_rule": [],
+                "default_service_version": "",
+                "delete_retention_policy": [],
+                "last_access_time_enabled": false,
+                "restore_policy": [],
+                "versioning_enabled": false
+              }
+            ],
+            "cross_tenant_replication_enabled": true,
+            "custom_domain": [],
+            "customer_managed_key": [],
+            "default_to_oauth_authentication": false,
+            "edge_zone": "",
+            "enable_https_traffic_only": true,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/costmgmt-glb-rg/providers/Microsoft.Storage/storageAccounts/costmgmtwu1sta",
+            "identity": [],
+            "immutability_policy": [],
+            "infrastructure_encryption_enabled": false,
+            "is_hns_enabled": false,
+            "large_file_share_enabled": null,
+            "location": "westus",
+            "min_tls_version": "TLS1_2",
+            "name": "costmgmtwu1sta",
+            "network_rules": [
+              {
+                "bypass": [
+                  "AzureServices"
+                ],
+                "default_action": "Allow",
+                "ip_rules": [],
+                "private_link_access": [],
+                "virtual_network_subnet_ids": []
+              }
+            ],
+            "nfsv3_enabled": false,
+            "primary_access_key": "k+RWvCw4H/9LonNSPdmDigRIBgvIU6fZ5KA8vKF4UMILp/2VD1uJuO7EtEBFuchcFGk5M7e6hFOG+AStXFMY7Q==",
+            "primary_blob_connection_string": "DefaultEndpointsProtocol=https;BlobEndpoint=https://costmgmtwu1sta.blob.core.windows.net/;AccountName=costmgmtwu1sta;AccountKey=k+RWvCw4H/9LonNSPdmDigRIBgvIU6fZ5KA8vKF4UMILp/2VD1uJuO7EtEBFuchcFGk5M7e6hFOG+AStXFMY7Q==",
+            "primary_blob_endpoint": "https://costmgmtwu1sta.blob.core.windows.net/",
+            "primary_blob_host": "costmgmtwu1sta.blob.core.windows.net",
+            "primary_connection_string": "DefaultEndpointsProtocol=https;AccountName=costmgmtwu1sta;AccountKey=k+RWvCw4H/9LonNSPdmDigRIBgvIU6fZ5KA8vKF4UMILp/2VD1uJuO7EtEBFuchcFGk5M7e6hFOG+AStXFMY7Q==;EndpointSuffix=core.windows.net",
+            "primary_dfs_endpoint": "https://costmgmtwu1sta.dfs.core.windows.net/",
+            "primary_dfs_host": "costmgmtwu1sta.dfs.core.windows.net",
+            "primary_file_endpoint": "https://costmgmtwu1sta.file.core.windows.net/",
+            "primary_file_host": "costmgmtwu1sta.file.core.windows.net",
+            "primary_location": "westus",
+            "primary_queue_endpoint": "https://costmgmtwu1sta.queue.core.windows.net/",
+            "primary_queue_host": "costmgmtwu1sta.queue.core.windows.net",
+            "primary_table_endpoint": "https://costmgmtwu1sta.table.core.windows.net/",
+            "primary_table_host": "costmgmtwu1sta.table.core.windows.net",
+            "primary_web_endpoint": "https://costmgmtwu1sta.z22.web.core.windows.net/",
+            "primary_web_host": "costmgmtwu1sta.z22.web.core.windows.net",
+            "public_network_access_enabled": true,
+            "queue_encryption_key_type": "Service",
+            "queue_properties": [
+              {
+                "cors_rule": [],
+                "hour_metrics": [
+                  {
+                    "enabled": true,
+                    "include_apis": true,
+                    "retention_policy_days": 7,
+                    "version": "1.0"
+                  }
+                ],
+                "logging": [
+                  {
+                    "delete": false,
+                    "read": false,
+                    "retention_policy_days": 0,
+                    "version": "1.0",
+                    "write": false
+                  }
+                ],
+                "minute_metrics": [
+                  {
+                    "enabled": false,
+                    "include_apis": false,
+                    "retention_policy_days": 0,
+                    "version": "1.0"
+                  }
+                ]
+              }
+            ],
+            "resource_group_name": "costmgmt-glb-rg",
+            "routing": [],
+            "sas_policy": [],
+            "secondary_access_key": "rR033+LJVnAV9YrMARE7c7dpEl0KZ7fZtnP2aUwm2h6SWa8m5YmrpUWfwKbqthB+IOUQyOet+WHU+AStYUaBRg==",
+            "secondary_blob_connection_string": "",
+            "secondary_blob_endpoint": null,
+            "secondary_blob_host": null,
+            "secondary_connection_string": "DefaultEndpointsProtocol=https;AccountName=costmgmtwu1sta;AccountKey=rR033+LJVnAV9YrMARE7c7dpEl0KZ7fZtnP2aUwm2h6SWa8m5YmrpUWfwKbqthB+IOUQyOet+WHU+AStYUaBRg==;EndpointSuffix=core.windows.net",
+            "secondary_dfs_endpoint": null,
+            "secondary_dfs_host": null,
+            "secondary_file_endpoint": null,
+            "secondary_file_host": null,
+            "secondary_location": "",
+            "secondary_queue_endpoint": null,
+            "secondary_queue_host": null,
+            "secondary_table_endpoint": null,
+            "secondary_table_host": null,
+            "secondary_web_endpoint": null,
+            "secondary_web_host": null,
+            "sftp_enabled": false,
+            "share_properties": [
+              {
+                "cors_rule": [],
+                "retention_policy": [
+                  {
+                    "days": 7
+                  }
+                ],
+                "smb": []
+              }
+            ],
+            "shared_access_key_enabled": true,
+            "static_website": [],
+            "table_encryption_key_type": "Service",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozNjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiI0In0=",
+          "dependencies": [
+            "module.costmgmt_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.costmgmt_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/costmgmt-glb-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "costmgmt-glb-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.fw_pip",
+      "mode": "managed",
+      "type": "azurerm_public_ip",
+      "name": "pip",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "allocation_method": "Static",
+            "ddos_protection_mode": "VirtualNetworkInherited",
+            "ddos_protection_plan_id": null,
+            "domain_name_label": null,
+            "edge_zone": "",
+            "fqdn": null,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/publicIPAddresses/firewallwu1-pip",
+            "idle_timeout_in_minutes": 4,
+            "ip_address": "13.88.7.55",
+            "ip_tags": null,
+            "ip_version": "IPv4",
+            "location": "westus",
+            "name": "firewallwu1-pip",
+            "public_ip_prefix_id": null,
+            "resource_group_name": "network-wu1-rg",
+            "reverse_fqdn": null,
+            "sku": "Standard",
+            "sku_tier": "Regional",
+            "tags": null,
+            "timeouts": null,
+            "zones": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.hub_network_rg.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.hub_network_rg",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "network-wu1-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.hub_vnet_rgn1",
+      "mode": "managed",
+      "type": "azurerm_virtual_network",
+      "name": "az_vnet",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "address_space": [
+              "10.25.92.0/22"
+            ],
+            "bgp_community": "",
+            "ddos_protection_plan": [],
+            "dns_servers": [],
+            "edge_zone": "",
+            "encryption": [],
+            "flow_timeout_in_minutes": 0,
+            "guid": "881242eb-ba45-4192-819f-5219ba12fa61",
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/virtualNetworks/hub-network-wu1-vnet",
+            "location": "westus",
+            "name": "hub-network-wu1-vnet",
+            "resource_group_name": "network-wu1-rg",
+            "subnet": [
+              {
+                "address_prefix": "10.25.92.0/26",
+                "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/virtualNetworks/hub-network-wu1-vnet/subnets/AzureFirewallSubnet",
+                "name": "AzureFirewallSubnet",
+                "security_group": ""
+              },
+              {
+                "address_prefix": "10.25.95.224/27",
+                "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/virtualNetworks/hub-network-wu1-vnet/subnets/GatewaySubnet",
+                "name": "GatewaySubnet",
+                "security_group": ""
+              }
+            ],
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.hub_network_rg.azurerm_resource_group.lawsrg",
+            "module.hub_vnet_rgn1.azurerm_network_security_group.vnet-nsg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.keyvault_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/keys-glb-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "keys-glb-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.monitoring_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/monitoring-glb-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "monitoring-glb-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.operationallogs_WS",
+      "mode": "managed",
+      "type": "azurerm_log_analytics_workspace",
+      "name": "laws",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 3,
+          "attributes": {
+            "allow_resource_only_permissions": true,
+            "cmk_for_query_forced": false,
+            "daily_quota_gb": -1,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/monitoring-glb-rg/providers/Microsoft.OperationalInsights/workspaces/operationallogs-wu1-workspace",
+            "internet_ingestion_enabled": true,
+            "internet_query_enabled": true,
+            "local_authentication_disabled": false,
+            "location": "westus",
+            "name": "operationallogs-wu1-workspace",
+            "primary_shared_key": "gMNQP6vy5qmBKFEwWcN/bDEx3MGG7Z0YHzn01a9KPzJPOiHD6DrVi46wfCknwGkwQRY9Vjc91b/HiuBmfpnCog==",
+            "reservation_capacity_in_gb_per_day": null,
+            "resource_group_name": "monitoring-glb-rg",
+            "retention_in_days": 90,
+            "secondary_shared_key": "hHNIXIJUSImTZmxPJAFME65aTm34q7byh3XIM7Ztt7xDZ3tZpYMtbt7MmVJkegZz8irsIZmExKb6SniNELJ9+Q==",
+            "sku": "PerGB2018",
+            "tags": null,
+            "timeouts": null,
+            "workspace_id": "9470bca0-d1d7-47a2-8cbe-bb48207b7b36"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIzIn0=",
+          "dependencies": [
+            "module.monitoring_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.recovery_rg",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/recovery-wu3-rg",
+            "location": "westus3",
+            "managed_by": "",
+            "name": "recovery-wu3-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.shared_vnet",
+      "mode": "managed",
+      "type": "azurerm_network_security_group",
+      "name": "vnet-nsg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "index_key": "IdentitySubnet-nsg",
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/networkSecurityGroups/IdentitySubnet-nsg",
+            "location": "westus",
+            "name": "IdentitySubnet-nsg",
+            "resource_group_name": "shared-network-wu1-rg",
+            "security_rule": [],
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.sharednetwork_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.shared_vnet",
+      "mode": "managed",
+      "type": "azurerm_virtual_network",
+      "name": "az_vnet",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "address_space": [
+              "10.25.96.0/22"
+            ],
+            "bgp_community": "",
+            "ddos_protection_plan": [],
+            "dns_servers": [],
+            "edge_zone": "",
+            "encryption": [],
+            "flow_timeout_in_minutes": 0,
+            "guid": "2b11544d-0061-4306-be1c-33f77a8eeff7",
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/virtualNetworks/shared-wu1-vnet",
+            "location": "westus",
+            "name": "shared-wu1-vnet",
+            "resource_group_name": "shared-network-wu1-rg",
+            "subnet": [
+              {
+                "address_prefix": "10.25.96.0/22",
+                "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/virtualNetworks/shared-wu1-vnet/subnets/IdentitySubnet",
+                "name": "IdentitySubnet",
+                "security_group": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/networkSecurityGroups/IdentitySubnet-nsg"
+              }
+            ],
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.shared_vnet.azurerm_network_security_group.vnet-nsg",
+            "module.sharednetwork_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.shared_vnet_rt",
+      "mode": "managed",
+      "type": "azurerm_route_table",
+      "name": "subnet-rt",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "index_key": "IdentitySubnet",
+          "schema_version": 0,
+          "attributes": {
+            "disable_bgp_route_propagation": false,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/routeTables/IdentitySubnet-rt",
+            "location": "westus",
+            "name": "IdentitySubnet-rt",
+            "resource_group_name": "shared-network-wu1-rg",
+            "route": [
+              {
+                "address_prefix": "10.25.96.0/22",
+                "name": "IdentitySubnet-rt",
+                "next_hop_in_ip_address": "",
+                "next_hop_type": "VnetLocal"
+              }
+            ],
+            "subnets": [],
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.shared_vnet.azurerm_network_security_group.vnet-nsg",
+            "module.shared_vnet.azurerm_virtual_network.az_vnet",
+            "module.sharednetwork_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.sharednetwork_RG",
+      "mode": "managed",
+      "type": "azurerm_resource_group",
+      "name": "lawsrg",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg",
+            "location": "westus",
+            "managed_by": "",
+            "name": "shared-network-wu1-rg",
+            "tags": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo1NDAwMDAwMDAwMDAwLCJkZWxldGUiOjU0MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjo1NDAwMDAwMDAwMDAwfX0="
+        }
+      ]
+    },
+    {
+      "module": "module.vpn_pip",
+      "mode": "managed",
+      "type": "azurerm_public_ip",
+      "name": "pip",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "allocation_method": "Static",
+            "ddos_protection_mode": "VirtualNetworkInherited",
+            "ddos_protection_plan_id": null,
+            "domain_name_label": null,
+            "edge_zone": "",
+            "fqdn": null,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/publicIPAddresses/vpnwu1-pip",
+            "idle_timeout_in_minutes": 4,
+            "ip_address": "13.88.2.126",
+            "ip_tags": null,
+            "ip_version": "IPv4",
+            "location": "westus",
+            "name": "vpnwu1-pip",
+            "public_ip_prefix_id": null,
+            "resource_group_name": "network-wu1-rg",
+            "reverse_fqdn": null,
+            "sku": "Standard",
+            "sku_tier": "Regional",
+            "tags": null,
+            "timeouts": null,
+            "zones": null
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.hub_network_rg.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.vpn_s2s[0]",
+      "mode": "managed",
+      "type": "azurerm_virtual_network_gateway",
+      "name": "vpn",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "active_active": false,
+            "bgp_settings": [
+              {
+                "asn": 65515,
+                "peer_weight": 0,
+                "peering_addresses": [
+                  {
+                    "apipa_addresses": [],
+                    "default_addresses": [
+                      "10.25.95.254"
+                    ],
+                    "ip_configuration_name": "vnetGatewayConfig",
+                    "tunnel_ip_addresses": [
+                      "13.88.2.126"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "custom_route": [],
+            "default_local_network_gateway_id": null,
+            "edge_zone": "",
+            "enable_bgp": false,
+            "generation": "Generation1",
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/virtualNetworkGateways/vpn-wu1-vng",
+            "ip_configuration": [
+              {
+                "name": "vnetGatewayConfig",
+                "private_ip_address_allocation": "Dynamic",
+                "public_ip_address_id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/publicIPAddresses/vpnwu1-pip",
+                "subnet_id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/network-wu1-rg/providers/Microsoft.Network/virtualNetworks/hub-network-wu1-vnet/subnets/GatewaySubnet"
+              }
+            ],
+            "location": "westus",
+            "name": "vpn-wu1-vng",
+            "private_ip_address_enabled": false,
+            "resource_group_name": "network-wu1-rg",
+            "sku": "VpnGw1",
+            "tags": null,
+            "timeouts": null,
+            "type": "Vpn",
+            "vpn_client_configuration": [],
+            "vpn_type": "RouteBased"
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozNjAwMDAwMDAwMDAwLCJkZWxldGUiOjM2MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjozNjAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.hub_network_rg.azurerm_resource_group.lawsrg",
+            "module.hub_vnet_rgn1.azurerm_network_security_group.vnet-nsg",
+            "module.hub_vnet_rgn1.azurerm_virtual_network.az_vnet",
+            "module.vpn_pip.azurerm_public_ip.pip"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.windows_vm[0]",
+      "mode": "managed",
+      "type": "azurerm_network_interface",
+      "name": "nic",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "applied_dns_servers": [],
+            "dns_servers": [],
+            "edge_zone": "",
+            "enable_accelerated_networking": false,
+            "enable_ip_forwarding": false,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/networkInterfaces/amvdcwu1p00-eth0",
+            "internal_dns_name_label": "",
+            "internal_domain_name_suffix": "jvkbck1baadehpq2gp1xvdxp4h.dx.internal.cloudapp.net",
+            "ip_configuration": [
+              {
+                "gateway_load_balancer_frontend_ip_configuration_id": "",
+                "name": "internal",
+                "primary": true,
+                "private_ip_address": "10.25.96.4",
+                "private_ip_address_allocation": "Dynamic",
+                "private_ip_address_version": "IPv4",
+                "public_ip_address_id": "",
+                "subnet_id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/virtualNetworks/shared-wu1-vnet/subnets/IdentitySubnet"
+              }
+            ],
+            "location": "westus",
+            "mac_address": "",
+            "name": "amvdcwu1p00-eth0",
+            "private_ip_address": "10.25.96.4",
+            "private_ip_addresses": [
+              "10.25.96.4"
+            ],
+            "resource_group_name": "shared-network-wu1-rg",
+            "tags": null,
+            "timeouts": null,
+            "virtual_machine_id": ""
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxODAwMDAwMDAwMDAwLCJkZWxldGUiOjE4MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoxODAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.shared_vnet.azurerm_network_security_group.vnet-nsg",
+            "module.shared_vnet.azurerm_virtual_network.az_vnet",
+            "module.sharednetwork_RG.azurerm_resource_group.lawsrg"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "module.windows_vm[0]",
+      "mode": "managed",
+      "type": "azurerm_windows_virtual_machine",
+      "name": "virtual-machine",
+      "provider": "provider[\"registry.terraform.io/hashicorp/azurerm\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "additional_capabilities": [],
+            "additional_unattend_content": [],
+            "admin_password": "zw4sJq9JuM9NvE",
+            "admin_username": "eitadm",
+            "allow_extension_operations": true,
+            "availability_set_id": "",
+            "boot_diagnostics": [],
+            "bypass_platform_safety_checks_on_user_schedule_enabled": false,
+            "capacity_reservation_group_id": "",
+            "computer_name": "amvdcwu1p00",
+            "custom_data": null,
+            "dedicated_host_group_id": "",
+            "dedicated_host_id": "",
+            "edge_zone": "",
+            "enable_automatic_updates": true,
+            "encryption_at_host_enabled": false,
+            "eviction_policy": "",
+            "extensions_time_budget": "PT1H30M",
+            "gallery_application": [],
+            "hotpatching_enabled": false,
+            "id": "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Compute/virtualMachines/amvdcwu1p00",
+            "identity": [],
+            "license_type": "",
+            "location": "westus",
+            "max_bid_price": -1,
+            "name": "amvdcwu1p00",
+            "network_interface_ids": [
+              "/subscriptions/76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a/resourceGroups/shared-network-wu1-rg/providers/Microsoft.Network/networkInterfaces/amvdcwu1p00-eth0"
+            ],
+            "os_disk": [
+              {
+                "caching": "ReadWrite",
+                "diff_disk_settings": [],
+                "disk_encryption_set_id": "",
+                "disk_size_gb": 127,
+                "name": "amvdcwu1p00_disk1_afd5a8cb464546fbbc78f0ec11b0a190",
+                "secure_vm_disk_encryption_set_id": "",
+                "security_encryption_type": "",
+                "storage_account_type": "Standard_LRS",
+                "write_accelerator_enabled": false
+              }
+            ],
+            "patch_assessment_mode": "ImageDefault",
+            "patch_mode": "AutomaticByOS",
+            "plan": [],
+            "platform_fault_domain": -1,
+            "priority": "Regular",
+            "private_ip_address": "10.25.96.4",
+            "private_ip_addresses": [
+              "10.25.96.4"
+            ],
+            "provision_vm_agent": true,
+            "proximity_placement_group_id": "",
+            "public_ip_address": "",
+            "public_ip_addresses": [],
+            "reboot_setting": "",
+            "resource_group_name": "shared-network-wu1-rg",
+            "secret": [],
+            "secure_boot_enabled": false,
+            "size": "Standard_B2s",
+            "source_image_id": "",
+            "source_image_reference": [
+              {
+                "offer": "WindowsServer",
+                "publisher": "MicrosoftWindowsServer",
+                "sku": "2019-Datacenter",
+                "version": "latest"
+              }
+            ],
+            "tags": null,
+            "termination_notification": null,
+            "timeouts": null,
+            "timezone": "",
+            "user_data": "",
+            "virtual_machine_id": "0e643d5b-474e-411d-a153-7e9051a8083d",
+            "virtual_machine_scale_set_id": "",
+            "vtpm_enabled": false,
+            "winrm_listener": [],
+            "zone": ""
+          },
+          "sensitive_attributes": [],
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoyNzAwMDAwMDAwMDAwLCJkZWxldGUiOjI3MDAwMDAwMDAwMDAsInJlYWQiOjMwMDAwMDAwMDAwMCwidXBkYXRlIjoyNzAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "module.shared_vnet.azurerm_network_security_group.vnet-nsg",
+            "module.shared_vnet.azurerm_virtual_network.az_vnet",
+            "module.sharednetwork_RG.azurerm_resource_group.lawsrg",
+            "module.windows_vm.azurerm_network_interface.nic"
+          ]
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}

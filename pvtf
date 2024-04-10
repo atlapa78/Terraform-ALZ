@@ -1,0 +1,45 @@
+# terraform { 
+#   required_version = ">= 1.0"
+#   required_providers {
+#     azurerm = {
+#       source  = "hashicorp/azurerm"
+#       version = ">=3.0"
+#     }
+
+#     random = {
+#       source  = "hashicorp/random"
+#       version = "3.1.0"
+#     }
+
+#   }
+# }
+
+# # provider "azurerm" {
+# #   features { }
+# # }
+
+
+
+# provider "azurerm" {
+#   //alias           = "platform"
+
+#   subscription_id = "76eaa65e-b2f7-4eb4-b96c-f91db52fbe8a"
+#   tenant_id       = "6b0ee7fd-8166-47a9-bc89-31a540f0ddff"
+#   client_id       = "1a0463b5-b07b-41ef-be76-446bf018420f"
+#   client_secret   = "Def8Q~.-oDxpvoXd-Oy~18hzW5d8YLGKpYuaudt4"
+  
+
+#   features {}
+# }
+
+# #provider "azurerm" {
+# #  alias           = "workload"
+
+#   #subscription_id = "90c683e6-c3fa-4edf-ac00-224e0cb7a33c"
+#   #tenant_id       = " "
+#   #client_id       = "1a0463b5-b07b-41ef-be76-446bf018420f"
+  
+#   #client_secret   = "Def8Q~.-oDxpvoXd-Oy~18hzW5d8YLGKpYuaudt4"
+   
+#   #features {}  
+# #}

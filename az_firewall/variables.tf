@@ -35,3 +35,13 @@ variable "fw_pip_id" {
   type        = string
   description = " (Required) Public IP for the azure fw"
 }
+
+variable "mgmt_fw_subnet_id" {
+  type        = string
+  description = " (Optional) Reference to the management subnet associated with the IP Configuration. Changing this forces a new resource to be created."
+}
+
+variable "mgmt_fw_pip_id" {
+  type        = string
+  description = " (Required) Public IP for azure fw management"
+}

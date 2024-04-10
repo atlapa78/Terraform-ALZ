@@ -11,10 +11,11 @@ account_tier                  = "Standard"
 account_replication_type      = "LRS"
 createalzkv                   = true
 createauditsta                = true
-creatediagsta                 = true
+createcoststa                 = true
 createhub1                    = true
 create_vms                    = true
 create_data_disks             = true
+createfirewall                = false
 vm_number                     = 1
 rsv_sku                       = "Standard"
 vault_name                    = "backup"
@@ -32,21 +33,22 @@ private_ip_address_allocation = "Dynamic"
 vng_type                      = "Vpn"
 vpn_type                      = "RouteBased"
 vpn_sku                       = "VpnGw1"
-create_vpn                    = true
+create_vpn                    = false
 audit_rg                      = "audit-logs"
 monitoring_rg                 = "monitoring"
 action_group                  = "action_group_1"
 costmgmt_rg                   = "costmgmt"
 keyvault_rg                   = "keys"
-hub_network_rg                = "network"
+hub_network_rg                = "hub-network"
 sharednetwork_rg              = "shared-network"
 backup_rg                     = "backup"
-aads_rg                       = "app-POWERBI"
+aads_rg                       = "aads"
+app_rg                        = "app-POWERBI"  
 app_network_rg                = "app-network"
 app_workload_rg               = "app-workload"
 recovery_rg                   = "recovery"
 shared_sta                    = "Share"
-cost_mgmt_sta                 = "costmgmt"
+cost_mgmt_sta                 = "costmg"
 workload_vnetname             = "workload"
 hubvnet                       = "hub-network"
 pip_vng                       = "vpn_vng"
@@ -57,8 +59,22 @@ recovery_aut_acc              = "recovery"
 recovery_rsv                  = "asr"
 sharedvnet                    = "shared"
 fw_name                       = "amvacfw"
-pip_fw                        = "firewall-pip"
-pip_nat_gw                    = "natgw_pip"
+pip_fw                        = "firewall"
+mgmt_pip_fw                   = "firewall-mgmt"
+fw_policy_name                = "test_policy"
+az_fw_policy_group_rule_name  = "network-rule-collection-group-01"
+az_fw_policy_net_rule_name    = "azure-core-collection-01"
+priority_group_rule           = 200
+priority_net_rule             = 100
+az_fw_policy_net_rule_action  = "Allow"
+pip_nat_gw                    = "natgw"
+audit_laws_name               = "auditlogs"
+audit_sta_name                = "auditst"
+monitoring_log_name           = "monitoringlog"
+vm_password                   = "!W3llkn0uN123#."
+deploy_dr_aut_acc             = false
+create_pip_nat_gw             = false
+
 
 data_disks = {
   disk0 = {
@@ -115,6 +131,16 @@ subnets_hub1 = {
     creatensg      = false
     create_rt      = false
   }
+
+  subnet2 = {
+    index          = 2
+    name           = "AzureFirewallManagementSubnet"
+    address_prefix = "10.25.93.0/26"
+    security_group = "AzureFirewallManagementSubnet-nsg"
+    creatensg      = false
+    create_rt      = false
+  }
+  
 
 }
 

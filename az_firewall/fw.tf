@@ -10,4 +10,11 @@ resource "azurerm_firewall" "firewall" {
     subnet_id            = var.fw_subnet_id
     public_ip_address_id = var.fw_pip_id
   }
+
+  management_ip_configuration {
+    name                 = "mgmt_configuration"
+    subnet_id            = var.mgmt_fw_subnet_id
+    public_ip_address_id = var.mgmt_fw_pip_id
+  }
+
 }

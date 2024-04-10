@@ -1,0 +1,6 @@
+priority,name,source_addresses,destination_addresses,protocols,destination_ports
+100,"azure-wireserver","10.25.103.0/24","168.63.129.16","TCP","80,443,32526"
+100,"Azure IMDS","10.25.103.0/24","169.254.169.254","Any","*"
+102,"Azure KMS","10.25.103.0/24","23.102.135.246","TCP","1688"
+
+
